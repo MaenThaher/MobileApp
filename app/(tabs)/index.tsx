@@ -16,6 +16,9 @@ export default function AuthenticationScreen() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+
+
+  
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
