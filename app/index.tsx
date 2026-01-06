@@ -137,7 +137,17 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
       {error !== "" && <Text style={styles.error}>{error}</Text>}
       {success !== "" && <Text style={styles.success}>{success}</Text>}
 
-
+     {/* LOGIN */}
+      {activeTab === "login" && !showForgotPassword && (
+        <View>
+          <TextInput
+            placeholder="Email"
+            style={styles.input}
+            onChangeText={(v) => setLoginValue("email", v)}
+          />
+          {loginErrors.email && (
+            <Text style={styles.error}>{loginErrors.email.message}</Text>
+          )}
   
    <Text style={styles.footer}>
         Available for An-Najah engineering students & instructors
