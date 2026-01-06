@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import {
     ScrollView,
     Text,
+    TouchableOpacity,
     View
 } from "react-native";
 
@@ -100,6 +101,39 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
           Intelligent Circuit Simulation & Analysis
         </Text>
       </View>
+
+
+ {!showForgotPassword && (
+        <View style={styles.tabs}>
+          <TouchableOpacity
+            style={[
+              styles.tabButton,
+              activeTab === "login" && styles.tabActive,
+            ]}
+            onPress={() => {
+              setActiveTab("login");
+              setError("");
+            }}
+          >
+            <Text>Log in</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.tabButton,
+              activeTab === "signup" && styles.tabActive,
+            ]}
+            onPress={() => {
+              setActiveTab("signup");
+              setError("");
+            }}
+          >
+            <Text>Create account</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+
 
 
   
