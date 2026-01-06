@@ -206,6 +206,26 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
           </Picker>
 
 
+         <TextInput
+            placeholder="Password"
+            secureTextEntry
+            style={styles.input}
+            onChangeText={(v) => setSignupValue("password", v)}
+          />
+
+          <TextInput
+            placeholder="Confirm password"
+            secureTextEntry
+            style={styles.input}
+            onChangeText={(v) => setSignupValue("confirm", v)}
+          />
+
+  <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={submitSignup(onSignup)}
+          >
+            <Text style={styles.buttonText}>Create account</Text>
+          </TouchableOpacity>
 
     </View>
 )}
