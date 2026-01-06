@@ -1,6 +1,11 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import {
+    ScrollView,
+    Text,
+    View
+} from "react-native";
 
 import { useAuth } from "../context/AuthContext";
 import {
@@ -88,6 +93,15 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
 
   return ( <ScrollView contentContainerStyle={styles.container}>
   
+  <View style={styles.header}>
+        <Icon name="cpu" size={36} />
+        <Text style={styles.title}>CircuitAI</Text>
+        <Text style={styles.subtitle}>
+          Intelligent Circuit Simulation & Analysis
+        </Text>
+      </View>
+
+
   
    <Text style={styles.footer}>
         Available for An-Najah engineering students & instructors
