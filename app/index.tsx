@@ -1,13 +1,15 @@
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
     ScrollView,
     Text,
+    TextInput,
     TouchableOpacity,
     View
 } from "react-native";
 
+import { Picker } from "@react-native-picker/picker";
 import { useAuth } from "../context/AuthContext";
 import {
     loginSchema,
@@ -15,7 +17,6 @@ import {
     signupSchema,
     SignupSchema,
 } from "../schema/authSchemas";
-
 export default function AuthenticationScreen(){
 
 const {user,login,signup,error,authError,isLoading}=useAuth();
@@ -182,7 +183,30 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
 
 {activeTab === "signup" && (
     <View>
-        
+        <TextInput
+            placeholder="Full name"
+            style={styles.input}
+            onChangeText={(v) => setSignupValue("name", v)}
+          />
+
+          <TextInput
+            placeholder="University email"
+            style={styles.input}
+            onChangeText={(v) => setSignupValue("email", v)}
+          />
+          
+         <Picker
+            selectedValue={undefined}
+            onValueChange={(v) => setSignupValue("role", v ?? "student")}
+            style={styles.picker}
+          >
+            <Picker.Item label="Select role" value="" />
+            <Picker.Item label="Student" value="student" />
+            <Picker.Item label="Instructor" value="instructor" />
+          </Picker>
+
+
+
     </View>
 )}
 
