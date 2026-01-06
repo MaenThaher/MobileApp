@@ -237,3 +237,15 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   </ScrollView>
   );
 }
+
+const COLORS = {
+  primary: "#4F46E5",
+  secondary: "#6366F1",
+  background: "#F0F4FF",
+  text: "#111827",
+  muted: "#6B7280",
+  border: "#E5E7EB",
+  error: "#EF4444",
+  success: "#22C55E",
+  white: "#FFFFFF",
+};
