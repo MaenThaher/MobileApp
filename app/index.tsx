@@ -74,6 +74,15 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
     }
   };
 
-
+ const onSignup = async (data: SignupSchema) => {
+    try {
+      setError("");
+      await signup(data.email, data.password, data.name, data.role);
+      setSuccess("Account created!");
+      router.replace("/About");
+    } catch (e: any) {
+      setError(e.message || "Signup failed");
+    }
+  };
 
 }
