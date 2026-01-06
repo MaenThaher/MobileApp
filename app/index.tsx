@@ -52,6 +52,28 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
     resolver: yupResolver(signupSchema),
   });
 
+  useEffect(() => {
+    registerLogin("email");
+    registerLogin("password");
+
+    registerSignup("name");
+    registerSignup("email");
+    registerSignup("password");
+    registerSignup("confirm");
+    registerSignup("role");
+  }, []);
+
+  const onLogin = async (data: LoginSchema) => {
+    try {
+      setError("");
+      await login(data.email, data.password);
+      setSuccess("Login successful!");
+      router.replace("/About");
+    } catch (e: any) {
+      setError(e.message || "Login failed");
+    }
+  };
+
 
 
 }
