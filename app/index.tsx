@@ -133,7 +133,9 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
         </View>
       )}
 
-
+      {/* Errors */}
+      {error !== "" && <Text style={styles.error}>{error}</Text>}
+      {success !== "" && <Text style={styles.success}>{success}</Text>}
 
 
   
