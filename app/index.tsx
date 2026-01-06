@@ -1,6 +1,14 @@
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
 import { useAuth } from "../context/AuthContext";
-
-
+import {
+    loginSchema,
+    LoginSchema,
+    signupSchema,
+    SignupSchema,
+} from "../schema/authSchemas";
 
 export default function AuthenticationScreen(){
 
@@ -24,5 +32,26 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   useEffect(() => {
     if (authError) setError(authError);
   }, [authError]);
+
+ const {
+    register: registerLogin,
+    handleSubmit: submitLogin,
+    setValue: setLoginValue,
+    formState: { errors: loginErrors },
+  } = useForm<LoginSchema>({
+    resolver: yupResolver(loginSchema),
+  });
+
+  /* Signup form */
+  const {
+    register: registerSignup,
+    handleSubmit: submitSignup,
+    setValue: setSignupValue,
+    formState: { errors: signupErrors },
+  } = useForm<SignupSchema>({
+    resolver: yupResolver(signupSchema),
+  });
+
+
 
 }
