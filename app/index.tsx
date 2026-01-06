@@ -12,6 +12,17 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+ useEffect(() => {
+    if (user === undefined) return; // auth still loading
 
+    if (user) {
+      router.replace("/About");
+    }
+  }, [user]);
+
+  /* Sync auth error */
+  useEffect(() => {
+    if (authError) setError(authError);
+  }, [authError]);
 
 }
