@@ -173,6 +173,11 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
             )}
           </TouchableOpacity>
 
+
+<TouchableOpacity onPress={() => setShowForgotPassword(true)}>
+            <Text style={styles.link}>Forgot password?</Text>
+          </TouchableOpacity>
+
    <Text style={styles.footer}>
         Available for An-Najah engineering students & instructors
       </Text>
