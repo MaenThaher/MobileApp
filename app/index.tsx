@@ -249,3 +249,102 @@ const COLORS = {
   success: "#22C55E",
   white: "#FFFFFF",
 };
+
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 24,
+    backgroundColor: COLORS.background,
+    flexGrow: 1,
+  },
+
+  header: {
+    alignItems: "center",
+    marginBottom: 28,
+  },
+
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: COLORS.primary,
+    marginTop: 6,
+  },
+
+  subtitle: {
+    color: COLORS.muted,
+    marginTop: 4,
+    textAlign: "center",
+  },
+
+  tabs: {
+    flexDirection: "row",
+    marginBottom: 20,
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+
+  tabButton: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: "center",
+  },
+
+  tabActive: {
+    backgroundColor: COLORS.primary,
+  },
+
+  input: {
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 12,
+    backgroundColor: COLORS.white,
+  },
+
+  picker: {
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: 10,
+    marginBottom: 12,
+    backgroundColor: COLORS.white,
+  },
+
+  primaryButton: {
+    backgroundColor: COLORS.primary,
+    padding: 14,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 12,
+  },
+
+  buttonText: {
+    color: COLORS.white,
+    fontWeight: "600",
+    fontSize: 16,
+  },
+
+  error: {
+    color: COLORS.error,
+    marginBottom: 6,
+  },
+
+  success: {
+    color: COLORS.success,
+    marginBottom: 6,
+  },
+
+  link: {
+    color: COLORS.primary,
+    marginTop: 12,
+    textAlign: "center",
+  },
+
+  footer: {
+    textAlign: "center",
+    marginTop: 30,
+    color: COLORS.muted,
+    fontSize: 12,
+  },
+});
