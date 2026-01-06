@@ -161,6 +161,18 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
           )}
 
 
+<TouchableOpacity
+            style={styles.primaryButton}
+            onPress={submitLogin(onLogin)}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Log in</Text>
+            )}
+          </TouchableOpacity>
+
    <Text style={styles.footer}>
         Available for An-Najah engineering students & instructors
       </Text>
