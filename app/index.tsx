@@ -85,4 +85,13 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
     }
   };
 
+
+  return ( <ScrollView contentContainerStyle={styles.container}>
+  
+  
+   <Text style={styles.footer}>
+        Available for An-Najah engineering students & instructors
+      </Text>
+  </ScrollView>
+  );
 }
