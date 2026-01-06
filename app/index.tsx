@@ -145,10 +145,22 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
             style={styles.input}
             onChangeText={(v) => setLoginValue("email", v)}
           />
+
           {loginErrors.email && (
             <Text style={styles.error}>{loginErrors.email.message}</Text>
           )}
   
+      <TextInput
+            placeholder="Password"
+            secureTextEntry
+            style={styles.input}
+            onChangeText={(v) => setLoginValue("password", v)}
+          />
+          {loginErrors.password && (
+            <Text style={styles.error}>{loginErrors.password.message}</Text>
+          )}
+
+
    <Text style={styles.footer}>
         Available for An-Najah engineering students & instructors
       </Text>
