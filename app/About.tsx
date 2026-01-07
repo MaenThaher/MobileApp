@@ -104,14 +104,33 @@ return(<ScrollView style={styles.container}>
   CircuitAI — a platform that addresses each of these pain points: 
 </Text>
 
+<View style={styles.bulletList}>
+
+<Text style={styles.bulletItem}>
+ • A domain-specific AI tutor trained on electrical engineering concepts 
+</Text>
+
+<Text style={styles.bulletItem}>
+   • An interactive simulator 
+  with instant visual feedback 
+</Text>
+
+<Text style={styles.bulletItem}> 
+  • A platform aligned with
+   An-Najahs actual curriculum and lab assignments 
+   </Text>
+
+<Text style={styles.bulletItem}> 
+  • Unlimited practice time
+   accessible from anywhere </Text>
+</View>
+
+</View>
 
 </View>
 
 
 
-
-
-</View>
 
 <View style={styles.footer}>
 <Text style={styles.footerText}>© CircuitAI 2026</Text>
