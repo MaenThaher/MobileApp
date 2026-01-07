@@ -19,6 +19,14 @@ return(<ScrollView style={styles.container}>
   and Computer Engineering department at An-Najah National University. 
   </Text>
 
+
+<Text style={styles.contentText}> This project represents months of research,
+   development, and collaboration between students 
+   who experienced firsthand the challenges of learning circuit theory 
+   and applying it in practice. 
+   </Text>
+
+
 </View>
 
 
