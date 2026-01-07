@@ -1,31 +1,37 @@
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Picker } from "@react-native-picker/picker";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import Icon from "react-native-vector-icons/Feather";
 
-import { Picker } from "@react-native-picker/picker";
 import { useAuth } from "../context/AuthContext";
 import {
-    loginSchema,
-    LoginSchema,
-    signupSchema,
-    SignupSchema,
+  loginSchema,
+  LoginSchema,
+  signupSchema,
+  SignupSchema,
 } from "../schema/authSchemas";
+
 export default function AuthenticationScreen(){
 
-const {user,login,signup,error,authError,isLoading}=useAuth();
+const {user,login,signup,error:authError,isLoading}=useAuth();
 
 
 const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+     // router.replace("/About");
 
  useEffect(() => {
     if (user === undefined) return; // auth still loading
