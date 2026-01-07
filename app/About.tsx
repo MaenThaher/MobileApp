@@ -56,8 +56,14 @@ return(<ScrollView style={styles.container}>
     <Text style={styles.roleDescription}> Creating the interactive 
       workspace and user interface. 
       Ensuring the platform is intuitive and accessible. 
-  </Text> </View>
+  </Text> 
+  </View>
+</View>
 
+<View style={styles.teamNote}> 
+  <Text style={styles.noteText}> We are students building CircuitAI 
+  as our capstone graduation project under faculty supervision. 
+  </Text> 
 </View>
 
 
@@ -95,7 +101,8 @@ const styles = StyleSheet.create
   teamMemberCard:{flex:1,margin:5,padding:10,borderWidth:1,borderColor:"#553352ff",borderRadius:8,alignItems:"center",backgroundColor:"#fd1"},
   roleTitle:{fontSize:18,fontWeight:"600",marginTop:5,color:"#f32"},
   roleDescription:{fontSize:14,textAlign:"center",marginTop:5,color:"#94A3B8"},
-
+  teamNote:{padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,backgroundColor:"#1E293B"},
+  noteText:{fontSize:14,color:"#94A3B8"}
 
 });
 
