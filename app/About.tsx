@@ -27,6 +27,11 @@ return(<ScrollView style={styles.container}>
    </Text>
 
 
+<Text style={styles.contentText}> By students, for students — CircuitAI is designed
+   to bridge the gap between 
+   classroom theory and hands-on lab work. 
+   </Text>
+
 </View>
 
 
