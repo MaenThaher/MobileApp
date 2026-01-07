@@ -12,8 +12,14 @@ return(<ScrollView style={styles.container}>
 
 <View style={styles.section}>
 <Text style={styles.pageTitle}>About CircuitAI</Text>
-</View>
 
+
+<Text style={styles.contentText}> 
+  CircuitAI is a graduation project built by final-year students in the Electrical 
+  and Computer Engineering department at An-Najah National University. 
+  </Text>
+
+</View>
 
 
 
@@ -41,6 +47,8 @@ const styles = StyleSheet.create
   contentWrapper:{padding: 20},
   section:{marginBottom: 30},
   pageTitle:{fontSize: 28, fontWeight: "bold", marginBottom: 10, color: "rgba(59, 165, 59, 1)"},
+  contentText: { fontSize: 16, lineHeight: 22, marginBottom: 10, color: "#95c0f5ff" },
+
 });
 
 
