@@ -99,6 +99,12 @@ return(<ScrollView style={styles.container}>
 
 <View/>
 
+<Text style={styles.contentText}> 
+  These frustrations led us to create 
+  CircuitAI — a platform that addresses each of these pain points: 
+</Text>
+
+
 </View>
 
 
