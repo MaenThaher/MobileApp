@@ -10,9 +10,8 @@ return(<ScrollView style={styles.container}>
 
 <View styles={styles.contentWrapper}>
 
-<View style={styles.section}>
-<Text style={styles.pageTitle}>About CircuitAI</Text>
-</View>
+
+
 
 
 
