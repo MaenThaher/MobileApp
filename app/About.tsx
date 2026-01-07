@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import Feather from "react-native-vector-icons/Feather";
 
 export default function About(){
 
@@ -8,7 +9,7 @@ return(<ScrollView style={styles.container}>
 <Text style={styles.headerText}>CircuitAi</Text>
 </View>
 
-<View styles={styles.contentWrapper}>
+<View style={styles.contentWrapper}>
 
 <View style={styles.section}>
 <Text style={styles.pageTitle}>About CircuitAI</Text>
@@ -37,6 +38,17 @@ return(<ScrollView style={styles.container}>
 
 <View style={styles.section}>
 <Text style={styles.sectionHeading}>The Team</Text>
+
+<View style={styles.teamLayout}>
+
+<View style={styles.teamMemberCard}>
+<Feather name="code" size={40} color="#333"/>
+<Text style={styles.roleTitle}>Backend & AI</Text>
+
+</View>
+
+</View>
+
 
 </View>
 
@@ -68,7 +80,8 @@ const styles = StyleSheet.create
   pageTitle:{fontSize: 28, fontWeight: "bold", marginBottom: 10, color: "rgba(59, 165, 59, 1)"},
   contentText: { fontSize: 16, lineHeight: 22, marginBottom: 10, color: "#95c0f5ff" },
   sectionHeading:{fontSize: 22, fontWeight: "bold", marginBottom: 10, color: "#858b9eff"},
-
+  teamLayout:{flexDirection:"row",justifyContent:"space-between",marginBottom:10},
+  teamMemberCard:{flex:1,margin:5,padding:10,borderWidth:1,borderColor:"#553352ff",borderRadius:8,alignItems:"center",backgroundColor:"#fd1"}
 });
 
 
