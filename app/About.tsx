@@ -75,11 +75,29 @@ return(<ScrollView style={styles.container}>
   From lab frustrations to a better tool
 </Text>
 
-<Text style={styles.contentText}> During our studies, 
+ <Text style={styles.contentText}> During our studies, 
   we encountered several
    persistent challenges: 
-</Text>
+ </Text>
 
+ <View style={styles.bulletList}>
+  <Text style={styles.bulletItem}>
+  • Limited lab time with crowded equipment schedules
+ </Text>
+
+<Text style={styles.bulletItem}> • Generic AI tools giving 
+  incorrect circuit advice or unsafe suggestions 
+  </Text> 
+
+<Text style={styles.bulletItem}> • Difficulty connecting abstract 
+  formulas from slides to physical circuits 
+  </Text> 
+
+<Text style={styles.bulletItem}> • Lack of practice 
+  opportunities before high-stakes lab exams 
+  </Text>
+
+<View/>
 
 </View>
 
@@ -116,7 +134,9 @@ const styles = StyleSheet.create
   roleTitle:{fontSize:18,fontWeight:"600",marginTop:5,color:"#f32"},
   roleDescription:{fontSize:14,textAlign:"center",marginTop:5,color:"#94A3B8"},
   teamNote:{padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,backgroundColor:"#1E293B"},
-  noteText:{fontSize:14,color:"#94A3B8"}
+  noteText:{fontSize:14,color:"#94A3B8"},
+  bulletList:{marginVertical:10},
+  bulletItem:{fontSize:16,lineHeight:22,marginVertical:2,color:"#CBD5E1"},
 
 });
 
