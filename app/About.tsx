@@ -10,6 +10,9 @@ return(<ScrollView style={styles.container}>
 
 <View styles={styles.contentWrapper}>
 
+<View style={styles.section}>
+<Text style={styles.pageTitle}>About CircuitAI</Text>
+</View>
 
 
 
@@ -34,7 +37,10 @@ const styles = StyleSheet.create
   header:{padding:20,backgroundColor:"red",alignItems:"center"},
   headerText:{fontSize:24,fontWeight:"bold",color:"green"},
   footer:{padding:20,alignItems:"center",backgroundColor:"yellow"},
-  footerText:{fontSize:14,color:"orange"}
+  footerText:{fontSize:14,color:"orange"},
+  contentWrapper:{padding: 20},
+  section:{marginBottom: 30},
+  pageTitle:{fontSize: 28, fontWeight: "bold", marginBottom: 10, color: "rgba(59, 165, 59, 1)"},
 });
 
 
