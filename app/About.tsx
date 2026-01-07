@@ -35,6 +35,12 @@ return(<ScrollView style={styles.container}>
 </View>
 
 
+<View style={styles.section}>
+<Text style={styles.sectionHeading}>The team</Text>
+
+</View>
+
+
 
 
 
@@ -61,6 +67,7 @@ const styles = StyleSheet.create
   section:{marginBottom: 30},
   pageTitle:{fontSize: 28, fontWeight: "bold", marginBottom: 10, color: "rgba(59, 165, 59, 1)"},
   contentText: { fontSize: 16, lineHeight: 22, marginBottom: 10, color: "#95c0f5ff" },
+  sectionHeading:{fontSize: 22, fontWeight: "bold", marginBottom: 10, color: "#858b9eff"},
 
 });
 
