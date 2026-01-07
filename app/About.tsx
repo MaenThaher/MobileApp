@@ -42,8 +42,11 @@ return(<ScrollView style={styles.container}>
 <View style={styles.teamLayout}>
 
 <View style={styles.teamMemberCard}>
+
 <Feather name="code" size={40} color="#333"/>
 <Text style={styles.roleTitle}>Backend & AI</Text>
+<Text style={styles.roleDescription}>Building the AI tutor and integrating it with course materials. 
+  Developing the simulation engine and knowledge base.</Text>
 
 </View>
 
@@ -81,7 +84,11 @@ const styles = StyleSheet.create
   contentText: { fontSize: 16, lineHeight: 22, marginBottom: 10, color: "#95c0f5ff" },
   sectionHeading:{fontSize: 22, fontWeight: "bold", marginBottom: 10, color: "#858b9eff"},
   teamLayout:{flexDirection:"row",justifyContent:"space-between",marginBottom:10},
-  teamMemberCard:{flex:1,margin:5,padding:10,borderWidth:1,borderColor:"#553352ff",borderRadius:8,alignItems:"center",backgroundColor:"#fd1"}
+  teamMemberCard:{flex:1,margin:5,padding:10,borderWidth:1,borderColor:"#553352ff",borderRadius:8,alignItems:"center",backgroundColor:"#fd1"},
+  roleTitle:{fontSize:18,fontWeight:"600",marginTop:5,color:"#f32"},
+  roleDescription:{fontSize:14,textAlign:"center",marginTop:5,color:"#94A3B8"},
+
+
 });
 
 
