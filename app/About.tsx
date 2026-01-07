@@ -75,6 +75,11 @@ return(<ScrollView style={styles.container}>
   From lab frustrations to a better tool
 </Text>
 
+<Text style={styles.contentText}> During our studies, 
+  we encountered several
+   persistent challenges: 
+</Text>
+
 
 </View>
 
