@@ -46,9 +46,17 @@ return(<ScrollView style={styles.container}>
 <Feather name="code" size={40} color="#333"/>
 <Text style={styles.roleTitle}>Backend & AI</Text>
 <Text style={styles.roleDescription}>Building the AI tutor and integrating it with course materials. 
-  Developing the simulation engine and knowledge base.</Text>
-
+  Developing the simulation engine and knowledge base.
+  </Text>
 </View>
+
+<View style={styles.teamMemberCard}> 
+  <Feather name="zap" size={40} color="#333" />
+   <Text style={styles.roleTitle}>Frontend & UX Engineer</Text>
+    <Text style={styles.roleDescription}> Creating the interactive 
+      workspace and user interface. 
+      Ensuring the platform is intuitive and accessible. 
+  </Text> </View>
 
 </View>
 
