@@ -36,7 +36,7 @@ return(<ScrollView style={styles.container}>
 
 
 <View style={styles.section}>
-<Text style={styles.sectionHeading}>The team</Text>
+<Text style={styles.sectionHeading}>The Team</Text>
 
 </View>
 
