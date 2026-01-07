@@ -1,9 +1,13 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 
 export default function About(){
 
 return(<ScrollView style={styles.container}>
+
+<View style={styles.header}>
+<Text style={styles.headerText}>CircuitAi</Text>
+</View>
 
 </ScrollView>);
 
@@ -11,4 +15,10 @@ return(<ScrollView style={styles.container}>
 }
 
 
-const styles = StyleSheet.create({container:{flex:1,backgroundColor:"#0F172A"}});
+const styles = StyleSheet.create
+({
+  container:{flex:1,backgroundColor:"blue"},
+  header:{padding:20,backgroundColor:"red",alignItems:"center"},
+  headerText:{fontSize:24,fontWeight:"bold",color:"green"}
+});
+
