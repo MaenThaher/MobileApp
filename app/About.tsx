@@ -8,7 +8,16 @@ return(<ScrollView style={styles.container}>
 <Text style={styles.headerText}>CircuitAi</Text>
 </View>
 
+<View styles={styles.contentWrapper}>
+  
+<View style={styles.section}>
 
+</View>
+
+
+
+
+</View>
 
 <View style={styles.footer}>
 <Text style={styles.footerText}>© CircuitAI 2026</Text>
