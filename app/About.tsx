@@ -70,6 +70,15 @@ return(<ScrollView style={styles.container}>
 </View>
 
 
+<View style={styles.section}>
+<Text style={styles.sectionHeading}>
+  From lab frustrations to a better tool
+</Text>
+
+
+</View>
+
+
 
 
 
