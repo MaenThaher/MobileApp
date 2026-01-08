@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 
 export default function About(){
@@ -263,6 +263,11 @@ return(<ScrollView style={styles.container}>
 
 </View>
 
+<View style={styles.ctaWrapper}>
+  <Pressable style={styles.button}>
+    <Text style={styles.buttonText}>Try CircuitAI</Text>
+  </Pressable>
+</View>
 
 <View style={styles.footer}>
 <Text style={styles.footerText}>© CircuitAI 2026</Text>
@@ -297,8 +302,10 @@ const styles = StyleSheet.create
   infoCard:{padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,marginBottom:10,backgroundColor:"#1E293B"},
   techLayout:{flexDirection:"row",flexWrap:"wrap"},
   techItem:{flexBasis:"48%",marginVertical:5,padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,backgroundColor:"#1E293B"},
-  techTitle:{fontSize:16,fontWeight:"600",marginBottom:5,color:"#E0E7FF"}
-
+  techTitle:{fontSize:16,fontWeight:"600",marginBottom:5,color:"#E0E7FF"},
+  button:{paddingVertical:12,paddingHorizontal:20,backgroundColor:"#3B82F6",borderRadius:8},
+  ctaWrapper:{flexDirection:"row",justifyContent:"space-around",marginVertical:20},
+  buttonText:{fontSize:14,color:"#64748B"},
 });
 
 
