@@ -267,6 +267,12 @@ return(<ScrollView style={styles.container}>
   <Pressable style={styles.button}>
     <Text style={styles.buttonText}>Try CircuitAI</Text>
   </Pressable>
+
+  <Pressable style={[styles.button, styles.buttonOutline]}> 
+    <Text style={styles.buttonOutlineText}>Contact us</Text> 
+    </Pressable>
+
+
 </View>
 
 <View style={styles.footer}>
@@ -306,6 +312,9 @@ const styles = StyleSheet.create
   button:{paddingVertical:12,paddingHorizontal:20,backgroundColor:"#3B82F6",borderRadius:8},
   ctaWrapper:{flexDirection:"row",justifyContent:"space-around",marginVertical:20},
   buttonText:{fontSize:14,color:"#64748B"},
+  buttonOutline:{backgroundColor:"transparent",borderWidth:1,borderColor:"#3B82F6"},
+  buttonOutlineText:{color:"#3B82F6",fontWeight:"600"},
+  
 });
 
 
