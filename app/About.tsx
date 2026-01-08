@@ -146,6 +146,29 @@ return(<ScrollView style={styles.container}>
     Project goals: 
     </Text>
 
+<View style={styles.bulletList}>
+<Text style={styles.bulletItem}>
+   • Evaluate if a domain-specific 
+  AI tutor improves circuit understanding 
+  </Text>
+
+<Text style={styles.bulletItem}> 
+  • Provide a safe practice 
+  environment outside physical labs
+  </Text>
+
+  <Text style={styles.bulletItem}> 
+    • Demonstrate the feasibility 
+    of course-integrated learning tools 
+    </Text>
+
+   <Text style={styles.bulletItem}>
+     • Create a foundation 
+    for future student improvements 
+    </Text> 
+</View>
+
+
  </View>
 
 
