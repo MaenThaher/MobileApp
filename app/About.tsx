@@ -142,7 +142,7 @@ return(<ScrollView style={styles.container}>
     representing the culmination of our undergraduate studies. 
     </Text>
 
-   <Text style={[styles.contentText, { fontWeight: "500", color: "#333" }]}> 
+   <Text style={[styles.contentText, { fontWeight: "500", color: "#d1a7a7ff" }]}> 
     Project goals: 
     </Text>
 
@@ -287,19 +287,19 @@ return(<ScrollView style={styles.container}>
 
 const styles = StyleSheet.create
 ({
-  container:{flex:1,backgroundColor:"blue"},
-  header:{padding:20,backgroundColor:"red",alignItems:"center"},
-  headerText:{fontSize:24,fontWeight:"bold",color:"green"},
-  footer:{padding:20,alignItems:"center",backgroundColor:"yellow"},
-  footerText:{fontSize:14,color:"orange"},
+  container:{flex:1,backgroundColor:"#0F172A"},
+  header:{padding:20,backgroundColor:"#0F172A",alignItems:"center"},
+  headerText:{fontSize:24,fontWeight:"bold",color:"#E0E7FF"},
+  footer:{padding:20,alignItems:"center",backgroundColor:"#1E293B"},
+  footerText:{fontSize:14,color:"#64748B"},
   contentWrapper:{padding: 20},
   section:{marginBottom: 30},
-  pageTitle:{fontSize: 28, fontWeight: "bold", marginBottom: 10, color: "rgba(59, 165, 59, 1)"},
-  contentText: { fontSize: 16, lineHeight: 22, marginBottom: 10, color: "#95c0f5ff" },
-  sectionHeading:{fontSize: 22, fontWeight: "bold", marginBottom: 10, color: "#858b9eff"},
+  pageTitle:{fontSize: 28, fontWeight: "bold", marginBottom: 10, color: "#E0E7FF"},
+  contentText: { fontSize: 16, lineHeight: 22, marginBottom: 10, color: "#CBD5E1" },
+  sectionHeading:{fontSize: 22, fontWeight: "bold", marginBottom: 10, color: "#E0E7FF"},
   teamLayout:{flexDirection:"row",justifyContent:"space-between",marginBottom:10},
-  teamMemberCard:{flex:1,margin:5,padding:10,borderWidth:1,borderColor:"#553352ff",borderRadius:8,alignItems:"center",backgroundColor:"#fd1"},
-  roleTitle:{fontSize:18,fontWeight:"600",marginTop:5,color:"#f32"},
+  teamMemberCard:{flex:1,margin:5,padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,alignItems:"center",backgroundColor:"#1E293B"},
+  roleTitle:{fontSize:18,fontWeight:"600",marginTop:5,color:"#E0E7FF"},
   roleDescription:{fontSize:14,textAlign:"center",marginTop:5,color:"#94A3B8"},
   teamNote:{padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,backgroundColor:"#1E293B"},
   noteText:{fontSize:14,color:"#94A3B8"},

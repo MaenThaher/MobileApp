@@ -34,7 +34,7 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
       router.replace("/About");
 
  useEffect(() => {
-    if (user === undefined) return; // auth still loading
+   // auth still loading
 
     if (user) {
       router.replace("/About");
