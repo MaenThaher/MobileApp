@@ -235,6 +235,14 @@ return(<ScrollView style={styles.container}>
 
 <Text style={styles.sectionHeading}>Future plans</Text>
 
+<View style={styles.infoCard}>
+<View style={styles.bulletList}>
+<Text style={styles.bulletItem}> → Extend support to more 
+  courses across different years and specializations 
+  </Text>
+
+</View>
+</View>
 
 </View>
 
