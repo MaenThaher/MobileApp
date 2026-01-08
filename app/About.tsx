@@ -139,8 +139,14 @@ return(<ScrollView style={styles.container}>
   <Text style={styles.contentText}> This project is part 
     of the Graduation Project 
     I/II course sequence, 
-    representing the culmination of our undergraduate studies. </Text>
-</View>
+    representing the culmination of our undergraduate studies. 
+    </Text>
+
+   <Text style={[styles.contentText, { fontWeight: "500", color: "#333" }]}> 
+    Project goals: 
+    </Text>
+
+ </View>
 
 
 </View>
@@ -179,7 +185,7 @@ const styles = StyleSheet.create
   bulletList:{marginVertical:10},
   bulletItem:{fontSize:16,lineHeight:22,marginVertical:2,color:"#CBD5E1"},
   infoCard:{padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,marginBottom:10,backgroundColor:"#1E293B"},
-  
+
 
 });
 
