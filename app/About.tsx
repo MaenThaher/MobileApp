@@ -122,10 +122,18 @@ return(<ScrollView style={styles.container}>
 
 <Text style={styles.bulletItem}> 
   • Unlimited practice time
-   accessible from anywhere </Text>
+   accessible from anywhere 
+   </Text>
 </View>
 
 </View>
+
+</View>
+
+<View style={styles.section}>
+<Text style={styles.sectionHeading}>
+  Graduation project & research
+</Text>
 
 </View>
 
