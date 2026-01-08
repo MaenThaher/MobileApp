@@ -175,12 +175,33 @@ return(<ScrollView style={styles.container}>
       Performance and features are scoped to meet the requirements 
       of our graduation project and initial research objectives. 
       </Text>
-    
+ 
  </View>
 
 
 </View>
 
+{/* How It's Built */} 
+<View style={styles.section}>
+
+<Text style={styles.sectionHeading}>Under the hood</Text>
+<View style={styles.techLayout}>
+<View style={styles.techItem}>
+
+<Text style={styles.techTitle}>Web Application</Text>
+ 
+  <Text style={styles.roleDescription}> Modern React-based 
+  interface for building 
+  and simulating circuits 
+  with real-time visual feedback. 
+  </Text>
+
+</View>
+
+</View>
+
+
+</View>
 
 
 
@@ -215,6 +236,8 @@ const styles = StyleSheet.create
   bulletList:{marginVertical:10},
   bulletItem:{fontSize:16,lineHeight:22,marginVertical:2,color:"#CBD5E1"},
   infoCard:{padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,marginBottom:10,backgroundColor:"#1E293B"},
+  techLayout:{flexDirection:"row",flexWrap:"wrap"},
+  techItem:{flexBasis:"48%",marginVertical:5,padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,backgroundColor:"#1E293B"},
 
 
 });
