@@ -246,6 +246,17 @@ return(<ScrollView style={styles.container}>
 <Text style={styles.bulletItem}> → Extend support to more 
   courses across different years and specializations 
   </Text>
+ <Text style={styles.bulletItem}> 
+  → Open-source 
+  parts of the codebase for academic 
+  and educational use 
+  </Text>
+
+  <Text style={styles.bulletItem}> 
+  → Enable future student cohorts
+   to improve and maintain CircuitAI 
+   as their own projects 
+   </Text>
 
 </View>
 </View>
