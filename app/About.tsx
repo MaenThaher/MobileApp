@@ -147,17 +147,18 @@ return(<ScrollView style={styles.container}>
     </Text>
 
 <View style={styles.bulletList}>
-<Text style={styles.bulletItem}>
+  
+  <Text style={styles.bulletItem}>
    • Evaluate if a domain-specific 
   AI tutor improves circuit understanding 
   </Text>
 
-<Text style={styles.bulletItem}> 
+  <Text style={styles.bulletItem}> 
   • Provide a safe practice 
   environment outside physical labs
-  </Text>
+   </Text>
 
-  <Text style={styles.bulletItem}> 
+   <Text style={styles.bulletItem}> 
     • Demonstrate the feasibility 
     of course-integrated learning tools 
     </Text>
@@ -166,9 +167,15 @@ return(<ScrollView style={styles.container}>
      • Create a foundation 
     for future student improvements 
     </Text> 
-</View>
 
-
+ </View>
+    
+    <Text style={styles.contentText}> CircuitAI is currently a prototype 
+      and pilot implementation. It is not yet a commercial product. 
+      Performance and features are scoped to meet the requirements 
+      of our graduation project and initial research objectives. 
+      </Text>
+    
  </View>
 
 
