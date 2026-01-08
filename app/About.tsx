@@ -220,14 +220,23 @@ return(<ScrollView style={styles.container}>
 <Text style={styles.techTitle}>Simulation Engine</Text> 
 <Text style={styles.roleDescription}> 
   Custom circuit solver with support for
-   DC, AC, and transient analysis. </Text>
+   DC, AC, and transient analysis. 
+   </Text>
 </View>
 
-</View>
-
 
 </View>
 
+
+</View>
+
+{/* what Next */}
+<View style={styles.section}>
+
+<Text style={styles.sectionHeading}>Future plans</Text>
+
+
+</View>
 
 
 <View style={styles.footer}>
