@@ -208,6 +208,12 @@ return(<ScrollView style={styles.container}>
 
 </View>
 
+<View style={styles.techItem}>
+<Text style={styles.techTitle}>Knowledge Base</Text>
+ <Text style={styles.roleDescription}> 
+  Built from course materials, textbooks,
+   and verified circuit examples from An-Najah curriculum. </Text>
+</View>
 
 
 </View>
