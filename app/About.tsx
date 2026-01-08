@@ -198,6 +198,18 @@ return(<ScrollView style={styles.container}>
 
 </View>
 
+<View style={styles.techItem}>
+
+<Text style={styles.techTitle}>Backend Services</Text> 
+
+<Text style={styles.roleDescription}> Scalable API for circuit 
+  simulation and AI-powered tutoring responses. 
+</Text>
+
+</View>
+
+
+
 </View>
 
 
@@ -238,7 +250,7 @@ const styles = StyleSheet.create
   infoCard:{padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,marginBottom:10,backgroundColor:"#1E293B"},
   techLayout:{flexDirection:"row",flexWrap:"wrap"},
   techItem:{flexBasis:"48%",marginVertical:5,padding:10,borderWidth:1,borderColor:"#334155",borderRadius:8,backgroundColor:"#1E293B"},
-
+  techTitle:{fontSize:16,fontWeight:"600",marginBottom:5,color:"#E0E7FF"}
 
 });
 
