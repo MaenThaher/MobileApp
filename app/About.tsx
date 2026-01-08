@@ -278,7 +278,7 @@ return(<ScrollView style={styles.container}>
 <View style={styles.footer}>
 <Text style={styles.footerText}>© CircuitAI 2026</Text>
 </View>
-
+</View>
 </ScrollView>);
 
 
@@ -314,7 +314,7 @@ const styles = StyleSheet.create
   buttonText:{fontSize:14,color:"#64748B"},
   buttonOutline:{backgroundColor:"transparent",borderWidth:1,borderColor:"#3B82F6"},
   buttonOutlineText:{color:"#3B82F6",fontWeight:"600"},
-  
+
 });
 
 
