@@ -15,17 +15,18 @@ return(<ScrollView style={styles.container}>
 <Text style={styles.pageTitle}>About CircuitAI</Text>
 
 
-<Text style={styles.contentText}> 
-  CircuitAI is a graduation project built by final-year students in the Electrical 
-  and Computer Engineering department at An-Najah National University. 
-  </Text>
-
 
 <Text style={styles.contentText}> This project represents months of research,
    development, and collaboration between students 
    who experienced firsthand the challenges of learning circuit theory 
    and applying it in practice. 
    </Text>
+
+
+<Text style={styles.contentText}> 
+  CircuitAI is a graduation project built by final-year students in the Electrical 
+  and Computer Engineering department at An-Najah National University. 
+  </Text>
 
 
 <Text style={styles.contentText}> By students, for students — CircuitAI is designed
@@ -75,15 +76,17 @@ return(<ScrollView style={styles.container}>
   From lab frustrations to a better tool
 </Text>
 
- <Text style={styles.contentText}> During our studies, 
-  we encountered several
-   persistent challenges: 
- </Text>
 
  <View style={styles.bulletList}>
   <Text style={styles.bulletItem}>
   • Limited lab time with crowded equipment schedules
  </Text>
+
+ <Text style={styles.contentText}> During our studies, 
+  we encountered several
+   persistent challenges: 
+ </Text>
+
 
 <Text style={styles.bulletItem}> • Generic AI tools giving 
   incorrect circuit advice or unsafe suggestions 
@@ -110,15 +113,19 @@ return(<ScrollView style={styles.container}>
  • A domain-specific AI tutor trained on electrical engineering concepts 
 </Text>
 
-<Text style={styles.bulletItem}>
-   • An interactive simulator 
-  with instant visual feedback 
-</Text>
+
 
 <Text style={styles.bulletItem}> 
   • A platform aligned with
    An-Najahs actual curriculum and lab assignments 
    </Text>
+
+
+<Text style={styles.bulletItem}>
+   • An interactive simulator 
+  with instant visual feedback 
+</Text>
+
 
 <Text style={styles.bulletItem}> 
   • Unlimited practice time
