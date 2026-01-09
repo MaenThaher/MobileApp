@@ -1,6 +1,6 @@
 import { Text } from "@react-navigation/elements";
 import { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, TextInput, View } from "react-native";
 
 
 export default function Contact(){
@@ -33,7 +33,16 @@ Thanks! we well get back to you soon.
 
  </View>
  ):(
-<></>
+<>
+
+<View style={styles.formField}>
+                <Text style={styles.label}>Name</Text>
+                <TextInput
+                  placeholder="Your full name"
+                  style={styles.input}
+                />
+              </View>
+</>
  )
  
 
@@ -58,11 +67,11 @@ container: {
     justifyContent: "center",
   },
   formColumn:{
-  padding:24,
+  padding:30,
   },
   pageTitle:{
     fontSize:32,
-    fontWeight:"700",color:"#fff",
+    fontWeight:"800",color:"#e9e9e9ff",
     marginBottom:12,
   },
   card:{
@@ -73,6 +82,9 @@ container: {
     color:"#aaa",
     marginBottom:24,
   },
+  formField:{marginBottom:18},
+  label:{color:"#ddd",marginBottom:6,fontWeight:500},
+  input:{backgroundColor:"#000",borderColor:"#333",borderWidth:1,borderRadius:10,padding:12,color:"#fff"},
   successMessage:{padding:20,backgroundColor:"rgba(79,70,229,0.15)"},
   successText:{color:"#4f46e5",fontWeight:"600",textAlign:"center"},
 
