@@ -36,12 +36,22 @@ Thanks! we well get back to you soon.
 <>
 
 <View style={styles.formField}>
-                <Text style={styles.label}>Name</Text>
+     <Text style={styles.label}>Name</Text>
+    <TextInput
+        placeholder="Your full name"
+     style={styles.input}
+    />
+              </View>
+
+<View style={styles.formField}>
+                <Text style={styles.label}>Email</Text>
                 <TextInput
-                  placeholder="Your full name"
+                  placeholder="your.email@najah.edu"
+                  keyboardType="email-address"
                   style={styles.input}
                 />
-              </View>
+ </View>
+              
 </>
  )
  
