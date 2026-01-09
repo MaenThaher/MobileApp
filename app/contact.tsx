@@ -1,8 +1,11 @@
 import { Text } from "@react-navigation/elements";
+import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
-
 export default function Contact(){
+const [submitted,setSubmitted]=useState(false);
+const [role,setRole]=useState<string | null>(null);
+
 
 return(<ScrollView contentContainerStyle={styles.container}>
 <View style={styles.card}>
@@ -16,6 +19,8 @@ return(<ScrollView contentContainerStyle={styles.container}>
             Questions, feedback, or interested in using CircuitAI in your course?
             Send us a message.
         </Text>
+
+
 
 </View>
  
