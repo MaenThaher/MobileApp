@@ -119,7 +119,7 @@ Thanks! we well get back to you soon.
 const styles = StyleSheet.create({
 container: {
     padding: 20,
-    backgroundColor: "red",
+    backgroundColor: "#0f0f0f",
     flexGrow: 1,
     justifyContent: "center",
   },

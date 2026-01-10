@@ -31,7 +31,7 @@ const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-      router.replace("/About");
+  // router.replace("/contact");
 
  useEffect(() => {
    // auth still loading
