@@ -7,7 +7,10 @@ export default function Contact(){
 const [submitted,setSubmitted]=useState(false);
 const [role,setRole]=useState<string | null>(null);
 
-
+const handleSubmit = ()=>{
+  setSubmitted(true);
+  setTimeout(()=>setSubmitted(false),5000)
+};
 
 return(<ScrollView contentContainerStyle={styles.container}>
 <View style={styles.card}>
@@ -41,9 +44,12 @@ Thanks! we well get back to you soon.
         placeholder="Your full name"
      style={styles.input}
     />
-     </View>
+  </View>
+
+
 
 <View style={styles.formField}>
+
                 <Text style={styles.label}>Email</Text>
                 <TextInput
                   placeholder="your.email@najah.edu"
@@ -54,18 +60,18 @@ Thanks! we well get back to you soon.
  </View>
 
  
-<View style={styles.formField}>
+  <View style={styles.formField}>
                 <Text style={styles.label}>Role</Text>
                 <View style={styles.roleContainer}>
                   {["Student", "Professor", "Admin", "Other"].map((r) => (
-                    <Pressable
+              <Pressable
                       key={r}
                       onPress={() => setRole(r)}
                       style={[
                         styles.roleButton,
                         role === r && styles.roleButtonActive,
                       ]}
-                    >
+                  >
                       <Text
                         style={[
                           styles.roleText,
@@ -79,6 +85,19 @@ Thanks! we well get back to you soon.
                 </View>
               </View>
 
+            <View style={styles.formField}>
+                <Text style={styles.label}>Message</Text>
+                <TextInput
+                  placeholder="Tell us what you're thinking..."
+                  multiline
+                  numberOfLines={6}
+                  style={[styles.input, styles.textarea]}
+                />
+              </View>
+
+              <Pressable style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Send message</Text>
+              </Pressable>
 
 </>
  )
@@ -130,7 +149,11 @@ container: {
   roleText:{color:"#aaa"},
   roleTextActive:{color:"#fff",fontWeight:"600"},
   roleButotnActive:{backgroundColor:"#4f46e5",borderColor:"#4f46e5"},
-  roleButtonActive:{backgroundColor:"#4f46e5",borderColor:"#4f46e5"}
+  roleButtonActive:{backgroundColor:"#4f46e5",borderColor:"#4f46e5"},
+  textarea:{height:120,textAlignVertical:"top"},
+  button:{marginTop:12,backgroundColor:"#4f46e5",paddingVertical:14,borderRadius:12,alignItems:"center",},
+  buttonText:{color:"#fff",fontWeight:"600",fontSize:16},
+  
 
 
 })
