@@ -1,6 +1,6 @@
 import { Text } from "@react-navigation/elements";
 import { useState } from "react";
-import { ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, TextInput, View } from "react-native";
 
 
 export default function Contact(){
@@ -41,7 +41,7 @@ Thanks! we well get back to you soon.
         placeholder="Your full name"
      style={styles.input}
     />
-              </View>
+     </View>
 
 <View style={styles.formField}>
                 <Text style={styles.label}>Email</Text>
@@ -49,9 +49,37 @@ Thanks! we well get back to you soon.
                   placeholder="your.email@najah.edu"
                   keyboardType="email-address"
                   style={styles.input}
-                />
+/>
+
  </View>
-              
+
+ 
+<View style={styles.formField}>
+                <Text style={styles.label}>Role</Text>
+                <View style={styles.roleContainer}>
+                  {["Student", "Professor", "Admin", "Other"].map((r) => (
+                    <Pressable
+                      key={r}
+                      onPress={() => setRole(r)}
+                      style={[
+                        styles.roleButton,
+                        role === r && styles.roleButtonActive,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.roleText,
+                          role === r && styles.roleTextActive,
+                        ]}
+                      >
+                        {r}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              </View>
+
+
 </>
  )
  
@@ -97,6 +125,12 @@ container: {
   input:{backgroundColor:"#000",borderColor:"#333",borderWidth:1,borderRadius:10,padding:12,color:"#fff"},
   successMessage:{padding:20,backgroundColor:"rgba(79,70,229,0.15)"},
   successText:{color:"#4f46e5",fontWeight:"600",textAlign:"center"},
+  roleContainer:{flexDirection:"row",flexWrap:"wrap",gap:10},
+  roleButton:{borderWidth:1,borderColor:"#333",paddingVertical:8,paddingHorizontal:14,borderRadius:20,},
+  roleText:{color:"#aaa"},
+  roleTextActive:{color:"#fff",fontWeight:"600"},
+  roleButotnActive:{backgroundColor:"#4f46e5",borderColor:"#4f46e5"},
+  roleButtonActive:{backgroundColor:"#4f46e5",borderColor:"#4f46e5"}
 
 
 })
