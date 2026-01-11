@@ -2,8 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text } from "@react-navigation/elements";
 import { useNavigation, useRouter } from "expo-router";
 import { JSX } from "react";
-import { Pressable, ScrollView, StyleSheet } from "react-native";
-import { View } from "react-native-reanimated/lib/typescript/Animated";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 import { type Href } from "expo-router";
 
@@ -58,6 +57,35 @@ return(<ScrollView style = {styles.page}>
 
 <View style={styles.grid}>
 
+<Card
+          title="Students"
+          description="Manage student accounts and activity"
+          href="/admin/students"
+          icon={<Ionicons name="school-outline" size={34} color="#fff" />}
+/>
+
+<Card
+          title="Teachers"
+          description="Manage instructors and teaching assignments"
+          href="/admin/teachers"
+          icon={<Ionicons name="person-circle-outline" size={34} color="#fff" />}
+        />
+
+
+   <Card
+          title="Courses"
+          description="Oversee courses and curriculum"
+          href="/admin/courses"
+          icon={<Ionicons name="book-outline" size={34} color="#fff" />}
+        />
+
+
+       <Card
+          title="Analytics"
+          description="View usage and engagement metrics"
+          href="/admin/analytics"
+          icon={<Ionicons name="bar-chart-outline" size={34} color="#fff" />}
+        />      
 
 </View>
 
