@@ -1,4 +1,6 @@
-## React Native
+## React Native && Expo
+
+### REACT NATIVE
 
 Well, the only experience I have with React Native is when I was PR reviewing some 'social justice' developers that help us develop A Ween Rayeh
 
@@ -9,6 +11,10 @@ But anyways, it's pretty easy to go from react to react native, once you know ho
 Did read a few docs before starting, and asked the AI for some tips too & to give me a cheat sheet to go from React to React Native, which will be a huge help
 [https://reactnative.dev/docs/intro-react5]
 [https://reactnative.dev/docs/tutorial]
+
+### EXPO
+
+[https://docs.expo.dev/versions/latest/sdk/constants/]
 
 ## Styling
 
