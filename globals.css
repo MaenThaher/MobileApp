@@ -1,0 +1,101 @@
+/*Basic stylistic reset for consistency*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* CSS Variables */
+:root {
+  /* Main Colors */
+  --background: hsl(210, 30%, 8%); /* App background */
+  --foreground: hsl(210, 20%, 95%); /* Primary text */
+  --muted: hsl(210, 15%, 60%); /* Secondary / muted text */
+  --muted-foreground: hsl(210, 15%, 60%); /* Alias for muted */
+
+  /*Accents */
+  --primary: hsl(217, 91%, 60%); /* Main accent (buttons, links) */
+  --primary-foreground: hsl(210, 20%, 95%);
+  --accent: hsl(250, 70%, 60%); /* Secondary accent ( rarely used  ) */
+  --accent-foreground: hsl(210, 20%, 95%);
+
+  /*Chat Bubbles */
+  --chat-user: var(--primary); /* User bubble */
+  --chat-ai-bubble: hsl(217, 25%, 18%); /* AI bubble background */
+  --chat-ai-text: var(--foreground); /* AI bubble text */
+
+  /* Sidebar*/
+  --sidebar-bg: hsl(210, 25%, 10%); /* Background */
+  --sidebar-text: var(--foreground); /* Text */
+  --sidebar-active: var(--primary); /* Active chat highlight */
+
+  /* Surfaces & Borders*/
+  --card: hsl(210, 25%, 12%); /* Cards, modals */
+  --card-foreground: var(--foreground);
+  --border: hsl(210, 25%, 18%); /* Dividers, outlines */
+  --input: hsl(210, 25%, 18%);
+  --ring: hsl(217, 91%, 60%);
+  
+  --secondary: hsl(210, 25%, 15%);
+  --secondary-foreground: hsl(210, 20%, 95%);
+  
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(210, 20%, 95%);
+
+  --radius: 12px;
+}
+
+/*!TODO: currently, this uses my system-ui font, I'm on linux Pop_OS and I like the font, but needs to be changed later 
+for cross platform consistency*/
+html {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+  color: var(--foreground);
+  background-color: var(--background);
+}
+
+body {
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 3rem; /* text-4xl */
+    line-height: 1;
+  }
+}
+
+h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  h2 {
+    font-size: 1.875rem; /* text-3xl */
+    line-height: 2.25rem;
+  }
+}
+
+h3 {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  h3 {
+    font-size: 1.25rem; /* text-xl */
+    line-height: 1.75rem;
+  }
+}
