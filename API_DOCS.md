@@ -28,6 +28,48 @@ Mobile uses a short, reliable flow:
 - It is the same encrypted session payload used by the web cookie (`session`).
 - On mobile you **store it** (e.g., AsyncStorage / SecureStore) and send it as a Bearer token.
 
+### 1.5) Signup to create account and get token
+
+**POST** `/api/authentication/signup/email`
+
+- **Body** (JSON):
+  - `email`: string (required)
+  - `password`: string (required)
+  - `fullName`: string (required)
+  - `role`: string (required) - "student", "teacher", or "instructor"
+- **Success** (201):
+  - `{ token: string }`
+- **Errors**:
+  - 400: `{ error: "email, password, fullName, and role are required" }` or `{ error: string }` (duplicate user)
+  - 500: `{ error: "Failed to signup", message: string }` or `{ error: "Failed to create session" }`
+
+**Signup creates a user account and immediately returns an auth token** - no separate login needed!
+
+### 1.6) Google authentication (Najah domain only)
+
+**POST** `/api/authentication/google`
+
+- **Body** (JSON):
+  - `idToken`: string (required) - Google ID token from Google Identity Services
+- **Success** (200):
+  - `{ token: string }`
+- **Errors**:
+  - 400: `{ error: "idToken is required" }`
+  - 403: `{ error: string }` (invalid domain - only najah.edu and najah.edu.jo allowed)
+  - 500: `{ error: "Failed to authenticate with Google", message: string }` or `{ error: "Failed to create session" }`
+
+**How it works:**
+1. Frontend obtains Google ID token via Google Identity Services (GSI)
+2. Backend verifies the token and checks Najah domain restriction
+3. If user exists with this Google account → login
+4. If user exists with this email (but not linked to Google) → link Google account and login
+5. If new user → create account and login
+6. Returns session token for mobile or sets cookie for web
+
+**Domain restriction:**
+- Only emails ending with `@najah.edu` or `@najah.edu.jo` are allowed
+- Domain verification happens server-side (never trust frontend!)
+
 ### 2) Store the token on the device
 
 - Store the returned `token` as a string.
@@ -91,7 +133,7 @@ curl -s "http://localhost:3000/api/auth/me" | jq
 >
 > - Most routes rely on `getCurrentUser()`.
 > - If you’re calling APIs from React Native, prefer the Bearer-token flow documented above.
-> - Some older auth endpoints under `/api/authentication/*` are legacy and **not active** (kept for reference). Logout is active.
+> - Authentication endpoints: signup (`/api/authentication/signup/email`) and logout are active. Login uses `/api/auth/token`. Some other endpoints under `/api/authentication/*` are legacy and **not active** (kept for reference).
 
 ---
 
@@ -776,7 +818,7 @@ curl -s "http://localhost:3000/api/auth/me" | jq
   - **400**: `{ error: "email and password are required" }`
   - **401**: `{ error: "Invalid email or password" }` or `{ error: "User not found" }`
   - **500**: `{ error: "Failed to login", message: "Internal server error" }` or `{ error: "Failed to create session" }`
-- **Notes**: 
+- **Notes**:
   - Creates a cookie session AND returns the same session token as Bearer token
   - Token is the encrypted session payload used by web cookie (`session`)
   - Mobile apps should store this token and send it as `Authorization: Bearer <token>`
@@ -808,6 +850,41 @@ curl -s "http://localhost:3000/api/auth/me" | jq
   ```
 - **Notes**: Clears the session cookie on the server side
 
+### Active endpoints
+
+#### **POST `/api/authentication/signup/email`** ✅
+
+- **Method**: POST
+- **Authentication**: None (public signup endpoint)
+- **Parameters**: None
+- **Query Parameters**: None
+- **Body** (JSON):
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "securepassword",
+    "fullName": "John Doe",
+    "role": "student"
+  }
+  ```
+- **Response** (201):
+  ```json
+  {
+    "token": "encrypted_session_value"
+  }
+  ```
+- **Success Status**: 201
+- **Error Status**:
+  - **400**: `{ error: "email, password, fullName, and role are required" }` or `{ error: string }` (duplicate user)
+  - **500**: `{ error: "Failed to signup", message: string }` or `{ error: "Failed to create session" }`
+
+**Mobile-friendly signup endpoint**:
+
+- Creates user in database with hashed password
+- Creates the normal cookie session
+- Returns the same session value as a Bearer token for React Native apps
+- React Native can store the returned token and send it via: `Authorization: Bearer <token>`
+
 ### Legacy / inactive endpoints
 
 The following exist in the tree but are **commented out** (legacy Supabase auth):
@@ -815,7 +892,6 @@ The following exist in the tree but are **commented out** (legacy Supabase auth)
 - `POST /api/authentication/login/email`
 - `POST /api/authentication/login/google`
 - `GET  /api/authentication/login/google/callback`
-- `POST /api/authentication/signup/email`
 - `POST /api/authentication/signup/google`
 - `GET  /api/authentication/signup/google/callback`
 
@@ -864,6 +940,7 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
   - auto-create a chat when `chatId` is not provided (chat name is generated from first 50 chars of message)
   - persist user and AI messages to DB
 - If not authenticated:
+
   - it still returns an answer, but will not persist messages
   - `chatId` will be `null` in response
 
@@ -879,10 +956,7 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
         "content": "Relevant slide content..."
       }
     ],
-    "used_queries": [
-      "machine learning definition",
-      "ML basics"
-    ]
+    "used_queries": ["machine learning definition", "ML basics"]
   }
   ```
 - **Success Status**: 200
@@ -900,8 +974,9 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
   - `list`: "true" (optional) - If set to "true", returns list of all user's chats instead of messages
 - **Body**: N/A
 - **Response** (200):
-  
+
   If `list=true`:
+
   ```json
   {
     "chats": [
@@ -915,9 +990,11 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
     ]
   }
   ```
+
   If not authenticated with `list=true`, returns: `{ chats: [] }`
-  
+
   Otherwise (with `chatId`):
+
   ```json
   {
     "messages": [
@@ -943,6 +1020,7 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
     ]
   }
   ```
+
 - **Success Status**: 200
 - **Error Status**:
   - **400**: `{ error: "chatId is required" }`
@@ -1744,8 +1822,9 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
   - `submissionId`: string (required) - Submission UUID
 - **Query Parameters**: None
 - **Body** (JSON - flexible structure):
-  
+
   **Option 1: Flat structure**
+
   ```json
   {
     "assignment_attachment_url": "https://...",
@@ -1757,8 +1836,9 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
     "content": "Student's submission text content"
   }
   ```
-  
+
   **Option 2: Nested structure**
+
   ```json
   {
     "assignment": {
@@ -1773,8 +1853,9 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
     }
   }
   ```
-  
+
   **Fields:**
+
   - `assignment_attachment_url` or `assignment.attachment_url`: string | null (optional) - Assignment file URL
   - `submission_attachment_url` or `submission.attachment_url`: string | null (optional) - Submission file URL
   - `max_points` or `assignment.max_points`: number (required) - Maximum points for the assignment
@@ -1800,7 +1881,7 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
     - `{ error: "assignment_attachment_url, description and instructions cannot all be empty" }`
   - **502**: `{ error: "AI returned an invalid grade" }` or `{ error: "AI returned a grade outside the allowed range (0-100)" }`
   - **500**: `{ error: "Failed to auto-grade submission", message: "AI service error" }`
-- **Notes**: 
+- **Notes**:
   - Uses AI service to automatically grade submissions
   - Grade is rounded to 2 decimal places
   - Grade must be between 0 and max_points
@@ -1831,7 +1912,7 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
 - **Error Status**:
   - **400**: `{ error: "A file must be provided" }` or `{ error: "courseId is required" }`
   - **500**: `{ error: "Failed to upload file", message: "Storage service error" }`
-- **Notes**: 
+- **Notes**:
   - Uploads to Supabase Storage bucket "assignments"
   - File path format: `{courseId}/{timestamp}-{filename}`
   - Returns both storage path and public URL
@@ -1870,13 +1951,14 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
 - **Parameters**: None
 - **Query Parameters**: None
 - **Body** (FormData):
-  - `file`: File (required) - Must be video (video/*), PDF (application/pdf), PPT (application/vnd.ms-powerpoint), or PPTX (application/vnd.openxmlformats-officedocument.presentationml.presentation)
+  - `file`: File (required) - Must be video (video/\*), PDF (application/pdf), PPT (application/vnd.ms-powerpoint), or PPTX (application/vnd.openxmlformats-officedocument.presentationml.presentation)
   - `courseId`: string (required) - Course UUID
   - `moduleType`: string (optional) - Module type. Required as "Slides" for PDF/PPTX ingestion into RAG pipeline
   - `instructorId`: string (required for Slides ingestion) - Instructor UUID (required when `moduleType === "Slides"`)
 - **Response** (201):
-  
+
   **For videos (uploaded to Google Drive):**
+
   ```json
   {
     "path": "google-drive-file-id",
@@ -1885,14 +1967,16 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
     "fileId": "google-drive-file-id"
   }
   ```
-  
+
   **For PDF/PPTX (uploaded to Supabase Storage):**
+
   ```json
   {
     "path": "course-uuid/1234567890-lecture.pdf",
     "url": "https://supabase-storage-url/modules/course-uuid/1234567890-lecture.pdf"
   }
   ```
+
 - **Success Status**: 201
 - **Error Status**:
   - **400**:
@@ -1901,7 +1985,7 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
     - `{ error: "instructorId is required for Slides ingestion" }`
     - `{ error: "Unsupported file type." }`
   - **500**: `{ error: "Failed to upload file to Google Drive", message: "Storage service error" }`
-- **Notes**: 
+- **Notes**:
   - Videos are uploaded to **Google Drive** and return `webViewLink` as `url`
   - PDFs/PPT/PPTX are uploaded to **Supabase Storage** bucket "modules"
   - Ingestion into slide_decks table and RAG pipeline happens only when `moduleType === "Slides"`
@@ -1936,7 +2020,7 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
 - **Error Status**:
   - **400**: `{ error: "File path (fileId) is required" }`
   - **500**: `{ error: "Failed to delete file from Google Drive", message: "Storage service error" }`
-- **Notes**: 
+- **Notes**:
   - Automatically detects storage type based on path format
   - Paths with "/" are treated as Supabase Storage paths
   - Paths without "/" are treated as Google Drive fileIds
@@ -1963,13 +2047,13 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
   ```
 - **Success Status**: 201
 - **Error Status**:
-  - **400**: 
+  - **400**:
     - `{ error: "A file must be provided" }`
     - `{ error: "courseId is required" }`
     - `{ error: "assignmentId is required" }`
     - `{ error: "studentId is required" }`
   - **500**: `{ error: "Failed to upload file", message: "Storage service error" }`
-- **Notes**: 
+- **Notes**:
   - Uploads to Supabase Storage bucket "submissions"
   - File path format: `{courseId}/{assignmentId}/{studentId}/{timestamp}-{filename}`
   - Returns both storage path and public URL
