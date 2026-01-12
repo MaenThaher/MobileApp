@@ -1,30 +1,24 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
-import { AuthProvider } from "@/context/AuthContext"; // ✅ IMPORTANT
+import { AuthProvider } from "@/context/AuthContext";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import RootGate from "./RootGate";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <AuthProvider> {/* ✅ MUST be here */}
+    <AuthProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          {/* Authentication screen */}
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-
-          {/* App after login */}
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-
-          <Stack.Screen
-            name="modal"
-            options={{ presentation: "modal", title: "Modal" }}
-          />
-        </Stack>
-
+        <Stack screenOptions={{ headerShown: false }} />
+        <RootGate />
         <StatusBar style="auto" />
       </ThemeProvider>
     </AuthProvider>
