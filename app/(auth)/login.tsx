@@ -138,14 +138,15 @@ export default function AuthScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <Feather name="cpu" size={48} color={primary} />
-        <Text style={styles.title}>CircuitAI</Text>
-        <Text style={styles.subtitle}>
-          Intelligent Circuit Simulation & Analysis
-        </Text>
-      </View>
+    <View style={{ flex: 1, backgroundColor: background }}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.header}>
+          <Feather name="cpu" size={48} color={primary} />
+          <Text style={styles.title}>CircuitAI</Text>
+          <Text style={styles.subtitle}>
+            Intelligent Circuit Simulation & Analysis
+          </Text>
+        </View>
 
       <View style={styles.panel}>
         {/* Tab Selector */}
@@ -450,7 +451,8 @@ export default function AuthScreen() {
           </Text>
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
