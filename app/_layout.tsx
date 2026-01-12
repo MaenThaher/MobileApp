@@ -6,6 +6,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
+import { background } from "@/constants/colors";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Stack } from "expo-router";
@@ -17,7 +18,14 @@ function RootStack() {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: background,
+        }}
+      >
         <ActivityIndicator size="large" />
       </View>
     );
@@ -27,6 +35,12 @@ function RootStack() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <StatusBar style="auto" />
       <Stack screenOptions={{ headerShown: false }}>
+        {/* Auth screen - only available when NOT authenticated */}
+        <Stack.Protected guard={!isAuthenticated}>
+          <Stack.Screen name="(auth)/login" />
+        </Stack.Protected>
+
+        {/* Role-based protected screens */}
         <Stack.Protected guard={isAuthenticated && user?.role === "admin"}>
           <Stack.Screen name="(app)/(tabs-admin)" />
         </Stack.Protected>
@@ -39,13 +53,15 @@ function RootStack() {
           <Stack.Screen name="(app)/(tabs-student)" />
         </Stack.Protected>
 
+        {/* Modal - only available when authenticated */}
         <Stack.Protected guard={isAuthenticated}>
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack.Protected>
 
-        <Stack.Protected guard={!isAuthenticated}>
-          <Stack.Screen name="(auth)/index" />
-        </Stack.Protected>
+        {/* Public screens */}
+        <Stack.Screen name="About" />
+        <Stack.Screen name="contact" />
+        <Stack.Screen name="index" />
       </Stack>
     </ThemeProvider>
   );
