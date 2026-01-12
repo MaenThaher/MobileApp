@@ -16,6 +16,17 @@ Did read a few docs before starting, and asked the AI for some tips too & to giv
 
 [https://docs.expo.dev/versions/latest/sdk/constants/]
 
+Stuff for tabs / navigation
+[https://docs.expo.dev/router/basics/common-navigation-patterns/]
+[https://www.youtube.com/watch?v=ZG6GngLP3qo]
+[https://www.youtube.com/watch?v=BElPB4Ai3j0]
+[https://docs.expo.dev/router/advanced/protected/]
+
+## Authentication
+
+[https://docs.expo.dev/develop/authentication/]
+[https://www.youtube.com/watch?v=yNaOaR2kIa0]
+
 ## Styling
 
 [https://stackoverflow.com/questions/37839755/is-there-a-way-of-storing-color-hex-codes-in-variables-similar-to-sass-in-react] (and we also did that in A Ween Rayeh)
