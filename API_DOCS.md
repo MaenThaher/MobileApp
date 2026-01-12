@@ -59,6 +59,7 @@ Mobile uses a short, reliable flow:
   - 500: `{ error: "Failed to authenticate with Google", message: string }` or `{ error: "Failed to create session" }`
 
 **How it works:**
+
 1. Frontend obtains Google ID token via Google Identity Services (GSI)
 2. Backend verifies the token and checks Najah domain restriction
 3. If user exists with this Google account → login
@@ -67,6 +68,7 @@ Mobile uses a short, reliable flow:
 6. Returns session token for mobile or sets cookie for web
 
 **Domain restriction:**
+
 - Only emails ending with `@najah.edu` or `@najah.edu.jo` are allowed
 - Domain verification happens server-side (never trust frontend!)
 
@@ -1297,61 +1299,66 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
 - **Body**: N/A
 - **Response** (200):
   ```json
-  [
-    {
-      "course_id": "uuid",
-      "course_code": "CS101",
-      "course_name": "Introduction to Computer Science",
-      "course_status": "active",
-      "course_description": "Basic programming concepts",
-      "course_semester": "Fall 2024",
-      "course_created_at": "2024-01-01T00:00:00Z",
-      "course_updated_at": "2024-01-01T00:00:00Z",
-      "student_count": 50,
-      "total_assignments": 8,
-      "total_modules": 12,
-      "published_modules": 10,
-      "assignments": [
-        {
-          "assignment_id": "uuid",
-          "title": "Assignment 1",
-          "status": "published",
-          "due_date": "2024-01-20T23:59:59Z",
-          "max_points": 100,
-          "template_id": null,
-          "created_at": "2024-01-01T00:00:00Z",
-          "updated_at": "2024-01-01T00:00:00Z",
-          "course_code": "CS101",
-          "course_name": "Introduction to Computer Science",
-          "ungraded_count": 5,
-          "submission_count": 45,
-          "graded_count": 40,
-          "is_overdue": false,
-          "days_until_due": 5
-        }
-      ],
-      "activity": [
-        {
-          "activity_id": "uuid",
-          "activity_type": "submission_graded",
-          "description": "Graded assignment submission",
-          "user_id": "uuid",
-          "course_id": "uuid",
-          "assignment_id": "uuid",
-          "template_id": null,
-          "created_at": "2024-01-15T10:00:00Z",
-          "course_code": "CS101",
-          "course_name": "Introduction to Computer Science"
-        }
-      ]
-    }
-  ]
+  {
+    "activeCourses": [
+      {
+        "id": "uuid",
+        "code": "CS101",
+        "name": "Introduction to Computer Science",
+        "description": "Basic programming concepts",
+        "semester": "Fall 2024",
+        "instructor_id": "uuid",
+        "status": "active",
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-01T00:00:00Z",
+        "student_count": 50,
+        "total_assignments": 8,
+        "total_modules": 12,
+        "published_modules": 10
+      }
+    ],
+    "assignments": [
+      {
+        "id": "uuid",
+        "course_id": "uuid",
+        "title": "Assignment 1",
+        "description": null,
+        "instructions": null,
+        "due_date": "2024-01-20T23:59:59Z",
+        "max_points": 100,
+        "status": "published",
+        "template_id": null,
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-01T00:00:00Z",
+        "ungraded_count": 5,
+        "submission_count": 45,
+        "graded_count": 40,
+        "course_code": "CS101",
+        "course_name": "Introduction to Computer Science",
+        "attachment_url": null
+      }
+    ],
+    "activities": [
+      {
+        "id": "uuid",
+        "user_id": "uuid",
+        "course_id": "uuid",
+        "assignment_id": "uuid",
+        "template_id": null,
+        "activity_type": "submission_graded",
+        "description": "Graded assignment submission",
+        "created_at": "2024-01-15T10:00:00Z",
+        "course_code": "CS101",
+        "course_name": "Introduction to Computer Science"
+      }
+    ]
+  }
   ```
 - **Success Status**: 200
 - **Error Status**:
   - **400**: `{ error: "instructorId is required" }`
   - **500**: `{ error: "Failed to fetch dashboard data", message: "Database error" }`
-- **Notes**: Uses RPC function `get_instructor_dashboard_overview()` from SQL
+- **Notes**: Uses RPC function `get_instructor_dashboard_overview()` from SQL. Returns a JSONB object with three arrays: `activeCourses`, `assignments`, and `activities`.
 
 ---
 
