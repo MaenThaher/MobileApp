@@ -230,3 +230,9 @@ export interface RAGResponse {
   sources: RAGSource[];
   used_queries: string[];
 }
+
+// EXTRA MOBILE TYPES
+export interface AxiosAPIError {
+  error: string;
+  message?: string;
+}
