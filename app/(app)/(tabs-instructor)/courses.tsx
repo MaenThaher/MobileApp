@@ -212,7 +212,7 @@ export default function InstructorCourses() {
             course={item}
             index={index}
             onPress={(id) =>
-              router.push(`/(app)/(tabs-instructor)/${id}` as any)
+              router.push(`/(app)/instructor-course/${id}` as any)
             }
           />
         )}
