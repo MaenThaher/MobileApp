@@ -293,7 +293,7 @@ export default function InstructorDashboard() {
                 <CourseCard
                   course={item}
                   onPress={() =>
-                    router.push(`/(app)/instructor-course/${item.id}` as any)
+                    router.push(`/(app)/(tabs-instructor)/courses/${item.id}` as any)
                   }
                 />
               )}
