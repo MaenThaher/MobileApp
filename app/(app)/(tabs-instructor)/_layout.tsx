@@ -1,4 +1,4 @@
-import { primary } from "@/constants/colors";
+import { theme } from "@/constants/colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";
 
@@ -7,7 +7,13 @@ export default function InstructorTabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: primary,
+        tabBarActiveTintColor: theme.primary,
+        tabBarInactiveTintColor: theme.muted,
+        tabBarStyle: {
+          backgroundColor: theme.card,
+          borderTopColor: theme.border,
+          borderTopWidth: 1,
+        },
       }}
     >
       <Tabs.Screen
@@ -20,11 +26,11 @@ export default function InstructorTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="assignments"
+        name="submissions"
         options={{
-          title: "Assignments",
+          title: "Submissions",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="clipboard" size={size} color={color} />
+            <Ionicons name="document-text" size={size} color={color} />
           ),
         }}
       />
