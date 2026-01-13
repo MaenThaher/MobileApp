@@ -161,8 +161,6 @@ const SectionHeader = ({
   </View>
 );
 
-// --- Main Screen ---
-
 export default function InstructorDashboard() {
   const router = useRouter();
   const { user } = useAuth();
