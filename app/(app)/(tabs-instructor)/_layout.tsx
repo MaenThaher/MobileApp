@@ -26,11 +26,11 @@ export default function InstructorTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="assignments"
+        name="submissions"
         options={{
-          title: "Assignments",
+          title: "Submissions",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="clipboard" size={size} color={color} />
+            <Ionicons name="document-text" size={size} color={color} />
           ),
         }}
       />
