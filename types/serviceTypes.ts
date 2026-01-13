@@ -1,4 +1,10 @@
-import { ActivityLogEntry, Assignment, Course } from ".";
+import {
+  ActivityLogEntry,
+  Assignment,
+  CircuitTemplate,
+  Course,
+  CourseModule,
+} from ".";
 
 export interface InstructorDashboardData {
   activeCourses: Course[];
@@ -32,4 +38,11 @@ export interface InstructorSubmissionItem {
   score: number | null;
   feedback: string | null;
   graded_at: string | null;
+}
+
+export interface CourseDetail {
+  course: Course;
+  modules: CourseModule[];
+  assignments: Assignment[];
+  templates: CircuitTemplate[];
 }
