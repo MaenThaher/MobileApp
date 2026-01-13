@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 24,
     maxHeight: "90%",
     minHeight: 200,
+    flex: 1,
   },
   safeArea: {
     flex: 1,
