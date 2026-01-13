@@ -2090,6 +2090,79 @@ If you plan to re-enable them, the code needs to be restored (uncommented and ad
   - **500**: `{ error: "Failed to delete file", message: "Storage service error" }`
 - **Notes**: Deletes file from Supabase Storage bucket "submissions"
 
+### **GET `/api/instructor/submissions`**
+
+- **Method**: GET
+- **Authentication**: Not enforced at route level
+- **Parameters**: None
+- **Query Parameters**:
+  - `instructorId`: string (required) - Instructor UUID
+- **Body**: N/A
+- **Response** (200):
+  ```json
+  [
+    {
+      "id": "uuid",
+      "type": "assignment",
+      "assignment_id": "uuid",
+      "assignment_title": "Assignment 1",
+      "assignment_due_date": "2024-01-20T23:59:59Z",
+      "assignment_max_points": 100,
+      "quiz_module_id": null,
+      "quiz_title": null,
+      "quiz_ends_at": null,
+      "quiz_max_score": null,
+      "student_id": "uuid",
+      "student_name": "John Doe",
+      "course_id": "uuid",
+      "course_code": "CS101",
+      "course_name": "Introduction to Computer Science",
+      "status": "submitted",
+      "submitted_at": "2024-01-15T10:00:00Z",
+      "completed_at": null,
+      "grade": null,
+      "score": null,
+      "feedback": null,
+      "graded_at": null
+    },
+    {
+      "id": "uuid",
+      "type": "quiz",
+      "assignment_id": null,
+      "assignment_title": null,
+      "assignment_due_date": null,
+      "assignment_max_points": null,
+      "quiz_module_id": "uuid",
+      "quiz_title": "Quiz 1",
+      "quiz_ends_at": "2024-01-25T12:00:00Z",
+      "quiz_max_score": 50,
+      "student_id": "uuid",
+      "student_name": "Jane Smith",
+      "course_id": "uuid",
+      "course_code": "CS101",
+      "course_name": "Introduction to Computer Science",
+      "status": "completed",
+      "submitted_at": null,
+      "completed_at": "2024-01-24T14:20:00Z",
+      "grade": null,
+      "score": null,
+      "feedback": null,
+      "graded_at": "2024-01-24T14:20:00Z"
+    }
+  ]
+  ```
+- **Success Status**: 200
+- **Error Status**:
+  - **400**: `{ error: "instructorId is required" }`
+  - **500**: `{ error: "Failed to fetch submissions", message: "Database error" }`
+- **Notes**:
+  - Returns **only ungraded** assignment submissions and quiz attempts
+  - Assignment submissions: only includes items with `status = 'submitted'` (not yet graded)
+  - Quiz attempts: only includes completed quizzes (`completed_at IS NOT NULL`) that are ungraded (`score IS NULL`)
+  - Results are sorted by date (most recent first)
+  - Uses RPC function `get_instructor_submissions()` from SQL
+  - The response includes only ungraded items from courses where the instructor is the course instructor
+
 ---
 
 ## Notes & gotchas (based on the actual implementation)
