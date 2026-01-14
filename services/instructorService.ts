@@ -5,10 +5,10 @@
 // DELETE -> delete data
 // That's how I'll name the functions so writing the components makes a bit more sense vs the API docs
 
-import { CreateAssignmentFormValues } from "@/components/modals/instructor/CreateAssignmentModal";
 import { API_BASE_URL } from "@/lib/config";
 import { Assignment, Course } from "@/types";
 import {
+  AssignmentFormValues,
   CourseDetail,
   InstructorDashboardData,
   InstructorSubmissionItem,
@@ -114,7 +114,7 @@ export async function patchInstructorCourseDetails(
 // }
 export async function postInstructorAssignment(
   courseId: string,
-  assignment: CreateAssignmentFormValues,
+  assignment: AssignmentFormValues,
   instructorId: string
 ): Promise<Assignment> {
   try {
@@ -142,8 +142,8 @@ export async function postInstructorAssignment(
 export async function patchInstructorAssignment(
   courseId: string,
   assignmentId: string,
-  assignment: Assignment,
-  instructorId: string
+  instructorId: string,
+  assignment: AssignmentFormValues
 ): Promise<Assignment> {
   try {
     const response = await axios.patch(
@@ -169,11 +169,12 @@ export async function patchInstructorAssignment(
 
 export async function deleteInstructorAssignment(
   instructorId: string,
-  assignmentId: string
+  assignmentId: string,
+  courseId: string
 ): Promise<void> {
   try {
     await axios.delete(
-      `${API_BASE_URL}/api/instructor/assignments/${assignmentId}`,
+      `${API_BASE_URL}/api/instructor/courses/${courseId}/assignments/${assignmentId}`,
       {
         data: {
           instructorId,
