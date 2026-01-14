@@ -17,7 +17,7 @@ async function onDelete(
   assignmentId: string,
   instructorId: string
 ) {
-  await deleteInstructorAssignment(instructorId, assignmentId);
+  await deleteInstructorAssignment(instructorId, assignmentId, courseId);
 }
 
 export function DeleteAssignmentModal({
