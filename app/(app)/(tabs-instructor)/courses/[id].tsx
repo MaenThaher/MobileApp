@@ -427,7 +427,14 @@ export default function CourseDetailScreen() {
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>Assignments</Text>
-                <TouchableOpacity style={styles.linkBtn}>
+                <TouchableOpacity
+                  style={styles.linkBtn}
+                  onPress={() =>
+                    router.push(
+                      `/(app)/(tabs-instructor)/courses/${id}/assignments`
+                    )
+                  }
+                >
                   <Text style={styles.linkBtnText}>View All</Text>
                   <Feather
                     name="arrow-right"
