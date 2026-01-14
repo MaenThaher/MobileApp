@@ -1,6 +1,7 @@
 import {
   ActivityLogEntry,
   Assignment,
+  AssignmentStatus,
   CircuitTemplate,
   Course,
   CourseModule,
@@ -45,4 +46,15 @@ export interface CourseDetail {
   modules: CourseModule[];
   assignments: Assignment[];
   templates: CircuitTemplate[];
+}
+
+export interface AssignmentFormValues {
+  title: string;
+  description?: string;
+  instructions?: string;
+  due_date: string;
+  max_points: number;
+  status: AssignmentStatus;
+  template_id?: string;
+  attachment_url?: string;
 }

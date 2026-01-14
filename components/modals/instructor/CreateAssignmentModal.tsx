@@ -2,6 +2,7 @@ import { FileUploadField } from "@/components/FileUploadField";
 import * as colors from "@/constants/colors";
 import { postInstructorAssignment } from "@/services/instructorService";
 import type { AssignmentStatus, CircuitTemplate } from "@/types";
+import { AssignmentFormValues } from "@/types/serviceTypes";
 import { formatDate } from "@/utils/generalUtils";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
@@ -17,31 +18,19 @@ import {
 } from "react-native";
 import { BaseModal } from "../BaseModal";
 
-export interface CreateAssignmentFormValues {
-  title: string;
-  description?: string;
-  instructions?: string;
-  due_date: string;
-  max_points: number;
-  status: AssignmentStatus;
-  template_id?: string;
-  attachment_url?: string;
-}
-
 export interface CreateAssignmentModalProps {
   visible: boolean;
   onClose: () => void;
   courseId: string;
   instructorId: string;
   templates?: CircuitTemplate[];
-  onSubmitted?: (data: CreateAssignmentFormValues) => void;
+  onSubmitted?: (data: AssignmentFormValues) => void;
 }
 
-// Placeholder submit function
-async function onSubmitPlaceholder(
+async function onSubmitPlace(
   courseId: string,
   instructorId: string,
-  formData: CreateAssignmentFormValues
+  formData: AssignmentFormValues
 ) {
   await postInstructorAssignment(courseId, formData, instructorId);
 }
@@ -142,7 +131,7 @@ export function CreateAssignmentModal({
 
     setIsSubmitting(true);
     try {
-      const formData: CreateAssignmentFormValues = {
+      const formData: AssignmentFormValues = {
         title: title.trim(),
         description: description.trim() || undefined,
         instructions: instructions.trim() || undefined,
@@ -153,7 +142,7 @@ export function CreateAssignmentModal({
         attachment_url: attachmentUrl || undefined,
       };
 
-      await onSubmitPlaceholder(courseId, instructorId, formData);
+      await onSubmitPlace(courseId, instructorId, formData);
 
       if (onSubmitted) {
         onSubmitted(formData);
