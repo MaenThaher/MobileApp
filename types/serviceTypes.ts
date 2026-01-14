@@ -5,12 +5,18 @@ import {
   CircuitTemplate,
   Course,
   CourseModule,
+  Profile,
+  Submission,
 } from ".";
 
 export interface InstructorDashboardData {
   activeCourses: Course[];
   assignments: Assignment[];
   activities: ActivityLogEntry[];
+}
+
+export interface InstructorAssignmentDetail extends Assignment {
+  submissions?: Submission[];
 }
 
 export interface InstructorSubmissionItem {
@@ -48,6 +54,11 @@ export interface CourseDetail {
   templates: CircuitTemplate[];
 }
 
+export interface ExtendedSubmission extends Submission {
+  student?: Profile;
+  assignment?: Assignment & { course?: Course };
+}
+
 export interface AssignmentFormValues {
   title: string;
   description?: string;
@@ -58,3 +69,18 @@ export interface AssignmentFormValues {
   template_id?: string;
   attachment_url?: string;
 }
+
+export type AutoGradeSubmissionInput = {
+  assignment_attachment_url: string | null;
+  max_points: number;
+  description: string | null;
+  instructions: string | null;
+  submission_id: string;
+  content: string | null;
+  submission_attachment_url: string | null;
+};
+
+export type AutoGradeSubmissionResult = {
+  grade: number | string;
+  feedback: string | null;
+};

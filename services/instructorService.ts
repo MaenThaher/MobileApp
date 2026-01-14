@@ -6,10 +6,14 @@
 // That's how I'll name the functions so writing the components makes a bit more sense vs the API docs
 
 import { API_BASE_URL } from "@/lib/config";
-import { Assignment, Course } from "@/types";
+import { Assignment, Course, Submission } from "@/types";
 import {
   AssignmentFormValues,
+  AutoGradeSubmissionInput,
+  AutoGradeSubmissionResult,
   CourseDetail,
+  ExtendedSubmission,
+  InstructorAssignmentDetail,
   InstructorDashboardData,
   InstructorSubmissionItem,
 } from "@/types/serviceTypes";
@@ -183,6 +187,76 @@ export async function deleteInstructorAssignment(
     );
   } catch (error) {
     console.error("Error deleting instructor assignment:", error);
+    throw error;
+  }
+}
+
+export async function getInstructorAssignmentDetail(
+  courseId: string,
+  assignmentId: string
+): Promise<InstructorAssignmentDetail> {
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/api/instructor/courses/${courseId}/assignments/${assignmentId}`
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching instructor assignment detail:", error);
+    throw error;
+  }
+}
+
+export async function getInstructorSubmissionDetail(
+  submissionId: string
+): Promise<ExtendedSubmission> {
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/api/instructor/submission/${submissionId}`
+    );
+    return response.data as ExtendedSubmission;
+  } catch (error) {
+    console.error("Error fetching instructor submission detail:", error);
+    throw error;
+  }
+}
+
+export async function putInstructorSubmissionGrade(
+  submissionId: string,
+  payload: {
+    grade: number;
+    feedback: string;
+    instructorId: string;
+  }
+): Promise<Submission> {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/api/instructor/submission/${submissionId}`,
+      {
+        grade: payload.grade,
+        feedback: payload.feedback,
+        instructor_id: payload.instructorId,
+      }
+    );
+    return response.data as Submission;
+  } catch (error) {
+    console.error("Error updating instructor submission:", error);
+    throw error;
+  }
+}
+
+export async function postInstructorSubmissionAutoGrade(
+  submissionId: string,
+  payload: AutoGradeSubmissionInput
+): Promise<AutoGradeSubmissionResult> {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/instructor/submission/${submissionId}/auto-grade`,
+      payload
+    );
+    return response.data as AutoGradeSubmissionResult;
+  } catch (error) {
+    console.error("Error auto-grading submission:", error);
     throw error;
   }
 }
