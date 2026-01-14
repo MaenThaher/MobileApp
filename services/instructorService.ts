@@ -5,6 +5,7 @@
 // DELETE -> delete data
 // That's how I'll name the functions so writing the components makes a bit more sense vs the API docs
 
+import { CreateAssignmentFormValues } from "@/components/modals/instructor/CreateAssignmentModal";
 import { API_BASE_URL } from "@/lib/config";
 import { Assignment, Course } from "@/types";
 import {
@@ -113,7 +114,7 @@ export async function patchInstructorCourseDetails(
 // }
 export async function postInstructorAssignment(
   courseId: string,
-  assignment: Assignment,
+  assignment: CreateAssignmentFormValues,
   instructorId: string
 ): Promise<Assignment> {
   try {
