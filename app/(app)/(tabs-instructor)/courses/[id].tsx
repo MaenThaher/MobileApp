@@ -515,7 +515,10 @@ export default function CourseDetailScreen() {
                       </View>
 
                       <View style={styles.assignmentFooter}>
-                        <TouchableOpacity style={styles.gradeBtn}>
+                        <TouchableOpacity 
+                          style={styles.gradeBtn}
+                          onPress={() => router.push(`/(app)/(tabs-instructor)/courses/${id}/assignments/${assignment.id}`)}
+                        >
                           <Text style={styles.gradeBtnText}>
                             Grade Submissions
                           </Text>
