@@ -87,8 +87,9 @@ export default function AssignmentsScreen() {
   };
 
   const handleManage = (assignment: Assignment) => {
-    // This will be implementes after I finish the instructor assignment management page
-    // router.push(`/instructor/courses/${courseId}/assignments/${assignment.id}`);
+    router.push(
+      `/(app)/(tabs-instructor)/courses/${courseId}/assignments/${assignment.id}`
+    );
   };
 
   const getStatusColor = (status: string) => {
