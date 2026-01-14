@@ -1,5 +1,12 @@
+//Some general terminology
+// GET -> fetch data
+// POST -> create data
+// PATCH / PUT -> update data
+// DELETE -> delete data
+// That's how I'll name the functions so writing the components makes a bit more sense vs the API docs
+
 import { API_BASE_URL } from "@/lib/config";
-import { Course } from "@/types";
+import { Assignment, Course } from "@/types";
 import {
   CourseDetail,
   InstructorDashboardData,
@@ -68,15 +75,6 @@ export async function getInstructorCourseDetails(
     throw error;
   }
 }
-//PAYLOAD
-// {
-//   "code": "CS101",
-//   "name": "Introduction to Computer Science Updated",
-//   "description": "Updated description",
-//   "semester": "Spring 2024",
-//   "status": "active",
-//   "instructorId": "uuid"
-// }
 
 export async function patchInstructorCourseDetails(
   courseId: string,
@@ -97,6 +95,92 @@ export async function patchInstructorCourseDetails(
     return response.data;
   } catch (error) {
     console.error("Error posting instructor course details:", error);
+    throw error;
+  }
+}
+
+//PAYLOAD
+// {
+//   "title": "Assignment 1",
+//   "description": "Complete the following exercises",
+//   "instructions": "Submit your work by the due date",
+//   "dueDate": "2024-01-20T23:59:59Z",
+//   "maxPoints": 100,
+//   "status": "published",
+//   "templateId": null,
+//   "attachmentUrl": "https://...",
+//   "instructorId": "uuid"
+// }
+export async function postInstructorAssignment(
+  courseId: string,
+  assignment: Assignment,
+  instructorId: string
+): Promise<Assignment> {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/instructor/courses/${courseId}/assignments`,
+      {
+        title: assignment.title,
+        description: assignment.description,
+        instructions: assignment.instructions,
+        dueDate: assignment.due_date,
+        maxPoints: assignment.max_points,
+        status: assignment.status,
+        templateId: assignment.template_id,
+        attachmentUrl: assignment.attachment_url,
+        instructorId: instructorId,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error posting instructor assignment:", error);
+    throw error;
+  }
+}
+
+export async function patchInstructorAssignment(
+  courseId: string,
+  assignmentId: string,
+  assignment: Assignment,
+  instructorId: string
+): Promise<Assignment> {
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URL}/api/instructor/courses/${courseId}/assignments/${assignmentId}`,
+      {
+        title: assignment.title,
+        description: assignment.description,
+        instructions: assignment.instructions,
+        dueDate: assignment.due_date,
+        maxPoints: assignment.max_points,
+        status: assignment.status,
+        templateId: assignment.template_id,
+        attachmentUrl: assignment.attachment_url,
+        instructorId: instructorId,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error patching instructor assignment:", error);
+    throw error;
+  }
+}
+
+export async function deleteInstructorAssignment(
+  instructorId: string,
+  assignmentId: string
+): Promise<void> {
+  try {
+    await axios.delete(
+      `${API_BASE_URL}/api/instructor/assignments/${assignmentId}`,
+      {
+        data: {
+          instructorId,
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Error deleting instructor assignment:", error);
     throw error;
   }
 }
