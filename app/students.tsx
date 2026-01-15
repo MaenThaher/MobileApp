@@ -1,9 +1,25 @@
+
+import {
+  EditStudentAdminModal,
+} from "../components/students/EditStudentAdminModal";
+
+
+import {
+  CreateStudentAdminModal
+} from "../components/students/CreateStudentAdminModal";
+
+
+import {
+  DeleteStudentAdminModal,
+} from "../components/students/DeleteStudentAdminModal";
+
 import { Feather } from "@expo/vector-icons";
 import { Text } from "@react-navigation/elements";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { FlatList, View } from "react-native-reanimated/lib/typescript/Animated";
-import { Profile } from "../types";
+import { Profile } from "../types/index2";
+
 function getStatusDisplay(
   lastActive: string | null
 ): "Active" | "Recently Active" | "Inactive" {
@@ -28,13 +44,32 @@ const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 const [isLoading, setIsLoading] = useState(true);
   const [students, setStudents] = useState<Profile[]>([]);
  const [deletingStudentId, setDeletingStudentId] = useState<string | null>(null);
+  const [editingStudentId, setEditingStudentId] = useState<string | null>(null);
 
-const filteredStudents = students.filter(
+
+
+  const fetchStudents = async () => {
+    try {
+      const res = await fetch("https://your-domain.com/api/admin/students");
+      const data = await res.json();
+      setStudents(data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const filteredStudents = students.filter(
     (s) =>
       s.full_name.toLowerCase().includes(search.toLowerCase()) ||
       s.email.toLowerCase().includes(search.toLowerCase())
   );
-
 
 
 
@@ -117,6 +152,45 @@ const renderItem = ({ item }: { item: Profile }) => {
         />
       )}
   
+
+<CreateStudentAdminModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={() => {
+          setIsLoading(true);
+          fetchStudents();
+        }}
+      />
+
+      <EditStudentAdminModal
+        isOpen={editingStudentId !== null}
+        onClose={() => setEditingStudentId(null)}
+        student={
+          editingStudentId
+            ? students.find((s) => s.id === editingStudentId) || null
+            : null
+        }
+        onSuccess={() => {
+          setIsLoading(true);
+          fetchStudents();
+        }}
+      />
+
+      <DeleteStudentAdminModal
+        isOpen={deletingStudentId !== null}
+        onClose={() => setDeletingStudentId(null)}
+        student={
+          deletingStudentId
+            ? students.find((s) => s.id === deletingStudentId) || null
+            : null
+        }
+        onSuccess={() => {
+          setIsLoading(true);
+          fetchStudents();
+        }}
+      />
+
+
     </View>)
 
 }
