@@ -17,7 +17,18 @@ return(<ScrollView style={styles.container}>
         </View>
         <Text style={styles.value}>{overview.totalUsers}</Text>
         <Text style={styles.sub}>{overview.activeUsers} active</Text>
+   
+    
+    <View style={styles.card}>
+        <View style={styles.row}>
+          <Feather name="book-open" size={20} />
+          <Text style={styles.label}>Courses</Text>
+        </View>
+        <Text style={styles.value}>{overview.totalCourses}</Text>
+        <Text style={styles.sub}>{overview.activeCourses} active</Text>
+      </View>
 
+      
 
 
     </View>
