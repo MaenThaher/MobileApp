@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Profile } from "../../types/index2";
+import { Profile } from "../../types/index";
 
 export interface EditStudentAdminModalProps {
   isOpen: boolean;
@@ -36,6 +36,8 @@ export default function EditStudentAdminModal({
     setError,
     formState: { errors, isSubmitting },
   } = useForm<EditStudentSchema>({
+    // The 'as any' cast solves the strict TypeScript mismatch between 
+    // the Yup inferred type and your manual Interface
     resolver: yupResolver(editUserSchema) as any,
     defaultValues: {
       full_name: "",
@@ -44,8 +46,7 @@ export default function EditStudentAdminModal({
     },
   });
 
-
-
+  // Reset form with student data when modal opens
   useEffect(() => {
     if (student && isOpen) {
       reset({
@@ -255,4 +256,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-

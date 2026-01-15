@@ -1,109 +1,132 @@
-// services/authService.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createClient } from '@supabase/supabase-js';
-import bcrypt from 'bcryptjs';
-import 'react-native-get-random-values';
+import { API_BASE_URL } from "@/lib/config";
+import { createSession, deleteSession, getSessionToken } from "@/lib/session";
+import { AxiosAPIError, Profile } from "@/types";
 
-const SUPABASE_URL = 'https://YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+import axios from "axios";
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export async function login(email: string, password: string): Promise<string> {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/api/auth/token`, {
+      email,
+      password,
+    });
 
-// ----------------- USER TYPE -----------------
-export interface UserType {
-  id: string;
-  email: string;
-  full_name: string;
-  role: string;
-  password?: string; // optional, only for internal use
+    const loginResponse = response.data;
+
+    await createSession(loginResponse.token);
+
+    return loginResponse.token;
+  } catch (error: any) {
+    if (error.response?.data) {
+      const apiError: AxiosAPIError = error.response.data;
+      throw new Error(apiError.error || "Failed to login");
+    }
+    if (error.message) {
+      throw error;
+    }
+    throw new Error("Network error. Please check your connection.");
+  }
 }
 
-// ----------------- SIGN UP -----------------
-export async function emailSignUp(
+export async function signup(
   email: string,
   password: string,
   fullName: string,
-  role: string
-): Promise<UserType> {
+  role: "student" | "teacher" | "instructor"
+): Promise<string> {
   try {
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
-
-    const { data, error } = await supabase
-      .from('profiles')
-      .insert({
+    const response = await axios.post(
+      `${API_BASE_URL}/api/authentication/signup/email`,
+      {
         email,
-        password: hashedPassword,
-        full_name: fullName,
+        password,
+        fullName,
         role,
-      })
-      .select()
-      .single();
+      }
+    );
 
-    if (error) throw error;
+    const signupResponse = response.data;
 
-    // Save user in AsyncStorage
-    await AsyncStorage.setItem('currentUser', JSON.stringify(data));
+    await createSession(signupResponse.token);
 
-    return data;
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.log('Sign up error:', err.message);
-      throw new Error(err.message);
-    } else {
-      console.log('Sign up unknown error:', err);
-      throw new Error('An unknown error occurred');
+    return signupResponse.token;
+  } catch (error: any) {
+    if (error.response?.data) {
+      const apiError: AxiosAPIError = error.response.data;
+      throw new Error(apiError.error || "Failed to signup");
     }
+    if (error.message) {
+      throw error;
+    }
+    throw new Error("Network error. Please check your connection.");
   }
 }
 
-// ----------------- SIGN IN -----------------
-export async function emailSignIn(email: string, password: string): Promise<UserType> {
+export async function getCurrentUser(): Promise<Profile | null> {
   try {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('email', email)
-      .single();
+    const token = await getSessionToken();
+    const headers: Record<string, string> = {};
 
-    if (error) throw error;
-    if (!data) throw new Error('User not found');
-
-    const isValid = bcrypt.compareSync(password, data.password);
-    if (!isValid) throw new Error('Invalid password');
-
-    // Save user in AsyncStorage
-    await AsyncStorage.setItem('currentUser', JSON.stringify(data));
-
-    return data;
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.log('Sign in error:', err.message);
-      throw new Error(err.message);
-    } else {
-      console.log('Sign in unknown error:', err);
-      throw new Error('An unknown error occurred');
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
     }
-  }
-}
 
-// ----------------- GET CURRENT USER -----------------
-export async function getCurrentUser(): Promise<UserType | null> {
-  try {
-    const user = await AsyncStorage.getItem('currentUser');
-    return user ? (JSON.parse(user) as UserType) : null;
-  } catch (err: unknown) {
-    console.log('Get current user error:', err);
+    const response = await axios.get(`${API_BASE_URL}/api/auth/me`, {
+      headers,
+    });
+
+    return response.data.user;
+  } catch (error) {
+    console.error("Error fetching current user:", error);
     return null;
   }
 }
 
-// ----------------- LOGOUT -----------------
-export async function logout() {
+export async function googleAuth(idToken: string): Promise<string> {
   try {
-    await AsyncStorage.removeItem('currentUser');
-    console.log('User logged out');
-  } catch (err: unknown) {
-    console.log('Logout error:', err);
+    const response = await axios.post(
+      `${API_BASE_URL}/api/authentication/google`,
+      {
+        idToken,
+      }
+    );
+
+    const authResponse = response.data;
+
+    await createSession(authResponse.token);
+
+    return authResponse.token;
+  } catch (error: any) {
+    if (error.response?.data) {
+      const apiError: AxiosAPIError = error.response.data;
+      throw new Error(apiError.error || "Failed to authenticate with Google");
+    }
+    if (error.message) {
+      throw error;
+    }
+    throw new Error("Network error. Please check your connection.");
+  }
+}
+
+export async function logout(): Promise<void> {
+  try {
+    const token = await getSessionToken();
+    const headers: Record<string, string> = {};
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    await axios.post(
+      `${API_BASE_URL}/api/authentication/logout`,
+      {},
+      {
+        headers,
+      }
+    );
+  } catch (error) {
+    console.error("Error during logout:", error);
+  } finally {
+    await deleteSession();
   }
 }

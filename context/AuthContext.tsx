@@ -1,95 +1,159 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { emailSignIn, emailSignUp, getCurrentUser, logout } from "../services/authService";
-import { Profile } from "../types/index2";
+// Almost a carbon copy of the web version
+import {
+  getCurrentUser,
+  googleAuth,
+  login,
+  logout,
+  signup,
+} from "@/services/authService";
+import { Profile } from "@/types";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-type AuthContextType = {
+interface AuthContextType {
   user: Profile | null;
   isLoading: boolean;
-  error: string | null;
+  isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, fullName: string, role: string) => Promise<void>;
+  signup: (
+    email: string,
+    password: string,
+    fullName: string,
+    role: "student" | "teacher" | "instructor"
+  ) => Promise<void>;
+  googleLogin: (idToken: string) => Promise<void>;
   logout: () => Promise<void>;
-};
+  refreshUser: () => Promise<void>;
+  error: string | null;
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize user from session (replace with RN-compatible API)
+  // Check if user is authenticated on mount
   useEffect(() => {
-    const initializeUser = async () => {
-      try {
-        const currentUser = await getCurrentUser(); // your RN auth service
-        if (currentUser) setUser(currentUser);
-      } catch (err) {
-        console.error("Failed to initialize user:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    initializeUser();
+    checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    setError(null);
+  const checkAuth = async () => {
     try {
-      await emailSignIn(email, password);
+      setIsLoading(true);
+      setError(null);
       const currentUser = await getCurrentUser();
-      if (currentUser) setUser(currentUser);
-      else throw new Error("User not found");
+      setUser(currentUser);
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      console.error("Auth check error:", err);
+      setError(err.message || "Failed to check authentication");
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const signup = async (email: string, password: string, fullName: string, role: string) => {
-    setIsLoading(true);
-    setError(null);
+  const handleLogin = async (email: string, password: string) => {
     try {
-      await emailSignUp(email, password, fullName, role);
+      setIsLoading(true);
+      setError(null);
+      await login(email, password);
+      // After successful login, fetch user data
       const currentUser = await getCurrentUser();
-      if (currentUser) setUser(currentUser);
-      else throw new Error("User not found");
+      setUser(currentUser);
     } catch (err: any) {
-      setError(err.message || "Signup failed");
+      setError(err.message || "Failed to login");
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logoutAuth = async () => {
-    setIsLoading(true);
-    setError(null);
+  const handleSignup = async (
+    email: string,
+    password: string,
+    fullName: string,
+    role: "student" | "teacher" | "instructor"
+  ) => {
     try {
+      setIsLoading(true);
+      setError(null);
+      await signup(email, password, fullName, role);
+      // After successful signup, fetch user data
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+    } catch (err: any) {
+      setError(err.message || "Failed to signup");
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async (idToken: string) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      await googleAuth(idToken);
+      // After successful Google auth, fetch user data
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+    } catch (err: any) {
+      setError(err.message || "Failed to authenticate with Google");
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
       await logout();
       setUser(null);
     } catch (err: any) {
-      setError(err.message || "Logout failed");
+      setError(err.message || "Failed to logout");
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (
-    <AuthContext.Provider
-      value={{ user, isLoading, error, login, signup, logout: logoutAuth }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  const refreshUser = async () => {
+    try {
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+    } catch (err: any) {
+      console.error("Error refreshing user:", err);
+    }
+  };
 
-const useAuth = () => {
+  const value: AuthContextType = {
+    user,
+    isLoading,
+    isAuthenticated: !!user,
+    login: handleLogin,
+    signup: handleSignup,
+    googleLogin: handleGoogleLogin,
+    logout: handleLogout,
+    refreshUser,
+    error,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within an AuthProvider");
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
   return context;
-};
-
-export { AuthProvider, useAuth };
-
+}

@@ -8,26 +8,23 @@ export type SubmissionStatus =
   | "graded";
 export type TemplateDifficulty = "beginner" | "intermediate" | "advanced";
 export type CourseStatus = "active" | "archived" | "draft";
-export type ModuleType = "Lecture" | "Lab" | "Quiz" | "Assignment";
+export type ModuleType = "Lecture" | "Lab" | "Quiz" | "Assignment" | "Slides";
 export type ModuleStatus = "Published" | "Draft";
 export type QuestionType = "multiple_choice" | "true_false" | "short_answer";
 
 // Profile - matches profiles table
 export interface Profile {
-  id: string;
-  email: string;
-  full_name: string;
-  role: string;
-  avatar_url?: string;
-  bio?: string;
-  last_active?: string;
-  created_at?: string;
-  updated_at?: string;
-  password?: string;
+  id: string; // UUID
+  role: UserRole; // NOT NULL DEFAULT 'student'
+  full_name: string; // NOT NULL (DB uses full_name, not fullName)
+  email: string; // NOT NULL UNIQUE
+  avatar_url: string | null;
+  bio: string | null;
+  last_active: string | null; // TIMESTAMPTZ
+  created_at: string; // TIMESTAMPTZ NOT NULL
+  updated_at: string; // TIMESTAMPTZ NOT NULL
+  google_sub: string | null; // Google OIDC subject identifier
 }
-
-// Then currentUser must match Profile
-
 
 // Course - matches courses table
 export interface Course {
@@ -90,6 +87,10 @@ export interface Submission {
   graded_by: string | null; // UUID
   created_at: string; // TIMESTAMPTZ NOT NULL
   updated_at: string; // TIMESTAMPTZ NOT NULL
+
+  //new fields from migration
+  content?: string;
+  attachment_url?: string;
   // Aggregated field (from join)
   student_name?: string | null; // From profiles join
 }
@@ -189,6 +190,7 @@ export interface ActivityLogEntry {
   course_id: string | null; // UUID
   assignment_id: string | null; // UUID
   template_id: string | null; // UUID
+  module_id: string | null; // UUID
   activity_type: string; // NOT NULL
   description: string; // NOT NULL
   created_at: string; // TIMESTAMPTZ NOT NULL
@@ -227,4 +229,10 @@ export interface RAGResponse {
   question: string;
   sources: RAGSource[];
   used_queries: string[];
+}
+
+// EXTRA MOBILE TYPES
+export interface AxiosAPIError {
+  error: string;
+  message?: string;
 }
