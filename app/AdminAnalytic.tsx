@@ -14,9 +14,10 @@ return(<ScrollView style={styles.container}>
         <View style={styles.row}>
           <Feather name="users" size={20} />
           <Text style={styles.label}>Total Users</Text>
-        </View>
-        <Text style={styles.value}>{overview.totalUsers}</Text>
-        <Text style={styles.sub}>{overview.activeUsers} active</Text>
+          
+              </View>
+    <Text style={styles.value}>{overview.totalUsers}</Text>
+          <Text style={styles.sub}>{overview.activeUsers} active</Text>
    
     
     <View style={styles.card}>
@@ -24,11 +25,36 @@ return(<ScrollView style={styles.container}>
           <Feather name="book-open" size={20} />
           <Text style={styles.label}>Courses</Text>
         </View>
+      
         <Text style={styles.value}>{overview.totalCourses}</Text>
         <Text style={styles.sub}>{overview.activeCourses} active</Text>
+      
       </View>
 
-      
+
+
+<View style={styles.card}>
+        <View style={styles.row}>
+          <Feather name="file-text" size={20} />
+          <Text style={styles.label}>Assignments</Text>
+        </View>
+                <Text style={styles.value}>{overview.totalAssignments}</Text>
+        <Text style={styles.sub}>
+          {overview.publishedAssignments} published
+        </Text>
+  </View>
+
+ <View style={styles.card}>
+    <View style={styles.row}>
+          <Feather name="check-circle" size={20} />
+          <Text style={styles.label}>Submissions</Text>
+        </View>
+        <Text style={styles.value}>{overview.totalSubmissions}</Text>
+    <Text style={styles.sub}>
+          {overview.gradedSubmissions} graded
+        </Text>
+    </View>
+
 
 
     </View>
