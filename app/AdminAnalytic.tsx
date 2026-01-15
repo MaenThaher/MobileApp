@@ -1,163 +1,211 @@
 import { Feather } from "@expo/vector-icons";
-import { Text } from "@react-navigation/elements";
-import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+    ActivityIndicator,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 
+/* ================= THEME ================= */
 
-
-
-type CoursePopularity = {
-  courseId: string;
-  courseCode: string;
-  courseName: string;
-  studentCount: number;
-  assignmentCount: number;
-  submissionCount: number;
-  averageGrade: number | null;
+const theme = {
+  pageBg: "#0B0E14",
+  textMain: "#E6EAF2",
+  textMuted: "#9AA4B2",
+  border: "#1E2430",
+  cardBg: "#111827",
+  primary: "#6366F1",
+  secondaryBg: "#1F2937",
 };
 
+/* ================= DEFAULT STATE ================= */
 
-function parseAnalyticsResponse(data: any) {
-  return {
-    overview: {
-      totalUsers: data?.overviewMetrics?.total_users || 0,
-      activeUsers: data?.overviewMetrics?.active_users || 0,
-      totalCourses: data?.overviewMetrics?.total_courses || 0,
-      activeCourses: data?.overviewMetrics?.active_courses || 0,
-      totalAssignments: data?.overviewMetrics?.total_assignments || 0,
-      publishedAssignments:
-        data?.overviewMetrics?.published_assignments || 0,
-      totalSubmissions: data?.overviewMetrics?.total_submissions || 0,
-      gradedSubmissions:
-        data?.overviewMetrics?.graded_submissions || 0,
-    },
-    courses: (data?.coursePopularity || []).map((c: any) => ({
-      courseId: c.course_id,
-      courseCode: c.course_code,
-      courseName: c.course_name,
-      studentCount: c.student_count,
-      assignmentCount: c.assignment_count,
-      submissionCount: c.submission_count,
-      averageGrade: c.average_grade
-        ? Number(c.average_grade)
-        : null,
-    })),
-  };
-}
+const EMPTY_OVERVIEW = {
+  totalUsers: 0,
+  activeUsers: 0,
+  totalCourses: 0,
+  activeCourses: 0,
+  totalAssignments: 0,
+  publishedAssignments: 0,
+  totalSubmissions: 0,
+  gradedSubmissions: 0,
+};
 
+/* ================= SCREEN ================= */
 
-export default function AdminAnalyticsScreen(){
-  const [overview, setOverview] = useState<any>(null);
- const [courses, setCourses] = useState<CoursePopularity[]>([]);
+export default function AdminAnalyticsScreen() {
   const [loading, setLoading] = useState(true);
+  const [overview, setOverview] = useState(EMPTY_OVERVIEW);
 
-
-useEffect(() => {
-    async function load() {
-      try {
-        const res = await fetch(
-          "https://YOUR_DOMAIN.com/api/admin/analytics"
-        );
-        const json = await res.json();
-        const parsed = parseAnalyticsResponse(json);
-
-        setOverview(parsed.overview);
-        setCourses(parsed.courses);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
+  useEffect(() => {
+    // mock / fetch API here
+    setTimeout(() => {
+      setOverview({
+        totalUsers: 1200,
+        activeUsers: 860,
+        totalCourses: 48,
+        activeCourses: 32,
+        totalAssignments: 210,
+        publishedAssignments: 180,
+        totalSubmissions: 5200,
+        gradedSubmissions: 4100,
+      });
+      setLoading(false);
+    }, 800);
   }, []);
 
-
-
-return(<ScrollView style={styles.container}>
-    <Text style={styles.title}>Analytics Dashboard</Text>
-    <View style={styles.card}>
-    
-        <View style={styles.row}>
-          <Feather name="users" size={20} />
-          <Text style={styles.label}>Total Users</Text>
-          
-              </View>
-    <Text style={styles.value}>{overview.totalUsers}</Text>
-          <Text style={styles.sub}>{overview.activeUsers} active</Text>
-   
-    
-    <View style={styles.card}>
-        <View style={styles.row}>
-          <Feather name="book-open" size={20} />
-          <Text style={styles.label}>Courses</Text>
-        </View>
-      
-        <Text style={styles.value}>{overview.totalCourses}</Text>
-        <Text style={styles.sub}>{overview.activeCourses} active</Text>
-      
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color={theme.primary} />
+        <Text style={{ color: theme.textMuted, marginTop: 8 }}>
+          Loading analytics...
+        </Text>
       </View>
+    );
+  }
 
-
-
-<View style={styles.card}>
-        <View style={styles.row}>
-          <Feather name="file-text" size={20} />
-          <Text style={styles.label}>Assignments</Text>
-        </View>
-                <Text style={styles.value}>{overview.totalAssignments}</Text>
-        <Text style={styles.sub}>
-          {overview.publishedAssignments} published
-        </Text>
-  </View>
-
- <View style={styles.card}>
-    <View style={styles.row}>
-          <Feather name="check-circle" size={20} />
-          <Text style={styles.label}>Submissions</Text>
-        </View>
-        <Text style={styles.value}>{overview.totalSubmissions}</Text>
-    <Text style={styles.sub}>
-          {overview.gradedSubmissions} graded
-        </Text>
-    </View>
-
- <Text style={styles.section}>Course Popularity</Text>
-
-{courses.map((c) => (
-        <View key={c.courseId} style={styles.courseCard}>
-          <Text style={styles.courseCode}>{c.courseCode}</Text>
-          <Text>{c.courseName}</Text>
-          <Text>Students: {c.studentCount}</Text>
-          <Text>Assignments: {c.assignmentCount}</Text>
-          <Text>
-            Avg Grade:{" "}
-            {c.averageGrade !== null
-              ? `${c.averageGrade.toFixed(1)}%`
-              : "N/A"}
+  return (
+    <ScrollView style={styles.page}>
+      <View style={styles.container}>
+        {/* HEADER */}
+        <View>
+          <Text style={styles.title}>Analytics Dashboard</Text>
+          <Text style={styles.subtitle}>
+            Platform overview & engagement
           </Text>
         </View>
-      ))}
 
-
-
-
-    </View>
-
-       </ScrollView>)
-
-
+        {/* OVERVIEW GRID */}
+        <View style={styles.metricsGrid}>
+          <MetricCard
+            icon="users"
+            label="Total Users"
+            value={overview.totalUsers}
+            sub={`${overview.activeUsers} active`}
+          />
+          <MetricCard
+            icon="book-open"
+            label="Courses"
+            value={overview.totalCourses}
+            sub={`${overview.activeCourses} active`}
+          />
+          <MetricCard
+            icon="file-text"
+            label="Assignments"
+            value={overview.totalAssignments}
+            sub={`${overview.publishedAssignments} published`}
+          />
+          <MetricCard
+            icon="check-circle"
+            label="Submissions"
+            value={overview.totalSubmissions}
+            sub={`${overview.gradedSubmissions} graded`}
+          />
+        </View>
+      </View>
+    </ScrollView>
+  );
 }
 
+/* ================= COMPONENTS ================= */
+
+function MetricCard({
+  icon,
+  label,
+  value,
+  sub,
+}: {
+  icon: keyof typeof Feather.glyphMap;
+  label: string;
+  value: number;
+  sub: string;
+}) {
+  return (
+    <View style={styles.metricCard}>
+      <View style={styles.metricHeader}>
+        <Feather
+          name={icon}
+          size={20}
+          color={theme.primary}
+        />
+        <Text style={styles.metricLabel}>{label}</Text>
+      </View>
+
+      <Text style={styles.metricValue}>{value}</Text>
+      <Text style={styles.metricSub}>{sub}</Text>
+    </View>
+  );
+}
+
+/* ================= STYLES ================= */
+
 const styles = StyleSheet.create({
-    container:{flex:1,backgroundColor:"#F4F6F8",padding:16},
-    title:{fontSize:22,fontWeight:"700",marginBottom:16},
-    row:{flexDirection:"row",alignItems:"center",gap:8},
-    courseCard:{backgroundColor:"#FFF",padding:14,borderRadius:10,marginBottom:10},
-    label:{fontSize:14,color:"#555",},
-    value:{fontSize:14,color:"#555"},
-    sub:{fontSize:12,color:"#888"},
-    courseCode:{fontWeight:"700"},
-    section:{fontSize:18,fontWeight:"600",marginVertical:12},
-    card:{backgroundColor:"#FFF",padding:16,borderRadius:12,marginBottom:12},
+  page: {
+    flex: 1,
+    backgroundColor: theme.pageBg,
+  },
+  container: {
+    padding: 24,
+    gap: 24,
+  },
+  center: {
+    flex: 1,
+    backgroundColor: theme.pageBg,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  /* Header */
+  title: {
+    fontSize: 28,
+    fontWeight: "700",
+    color: theme.textMain,
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: theme.textMuted,
+  },
+
+  /* Grid */
+  metricsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 16,
+  },
+
+  /* Card */
+  metricCard: {
+    backgroundColor: theme.cardBg,
+    borderColor: theme.border,
+    borderWidth: 1,
+    borderRadius: 16,
+    padding: 20,
+    width: "100%",
+  },
+
+  metricHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  metricLabel: {
+    fontSize: 14,
+    color: theme.textMuted,
+    fontWeight: "500",
+  },
+  metricValue: {
+    fontSize: 32,
+    fontWeight: "700",
+    color: theme.textMain,
+    marginTop: 8,
+  },
+  metricSub: {
+    fontSize: 14,
+    color: theme.textMuted,
+    marginTop: 4,
+  },
 });
