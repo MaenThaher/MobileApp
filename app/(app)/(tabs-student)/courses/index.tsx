@@ -6,7 +6,6 @@ import { clampNumber } from "@/utils/generalUtils";
 import {
   getCourseDeadlineLabel,
   getCourseDeadlineMeta,
-  getCourseGradeLabel,
 } from "@/utils/studentStatusHelpers";
 import { Feather } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
@@ -125,7 +124,6 @@ export default function StudentCoursesScreen() {
         ) : (
           <View style={styles.courseList}>
             {filteredCourses.map((course) => {
-              const gradeLabel = getCourseGradeLabel(course);
               const deadlineLabel = getCourseDeadlineLabel(course);
               const deadlineMeta = getCourseDeadlineMeta(course);
               const progressValue = clampNumber(
@@ -196,17 +194,6 @@ export default function StudentCoursesScreen() {
                         ]}
                       />
                     </View>
-                  </View>
-
-                  <View style={styles.gradeRow}>
-                    <Text
-                      style={[
-                        styles.gradeValue,
-                        course.final_grade === null && styles.gradeMuted,
-                      ]}
-                    >
-                      {gradeLabel}
-                    </Text>
                   </View>
 
                   <View style={styles.deadlineRow}>
@@ -466,17 +453,6 @@ const styles = StyleSheet.create({
   progressFill: {
     height: "100%",
     backgroundColor: theme.primary,
-  },
-  gradeRow: {
-    paddingTop: 2,
-  },
-  gradeValue: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: theme.foreground,
-  },
-  gradeMuted: {
-    color: theme.mutedForeground,
   },
   deadlineRow: {
     gap: 4,

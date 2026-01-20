@@ -93,7 +93,6 @@ export type AutoGradeSubmissionResult = {
 export interface StudentEnrollmentSummary {
   course: Course;
   progress: number;
-  final_grade: number | null;
 }
 
 export interface StudentAssignment
@@ -231,7 +230,6 @@ export interface StudentCourseOverview {
   total_assignments: number;
   // Enrollment fields
   progress: number;
-  final_grade: number | null;
   // Instructor fields
   instructor_name: string | null;
   instructor_email: string | null;
@@ -250,7 +248,6 @@ export interface StudentCourseInstructorInfo {
 export interface StudentCourseDetail {
   course: Course;
   progress: number;
-  final_grade: number | null;
   instructor: StudentCourseInstructorInfo | null;
   modules: CourseModule[];
   assignments: StudentAssignment[];
