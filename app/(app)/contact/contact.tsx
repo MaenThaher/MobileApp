@@ -1,21 +1,21 @@
 import {
-  background,
-  border,
-  card,
-  foreground,
-  mutedForeground,
-  primary,
-  primaryForeground,
-  radius,
+    background,
+    border,
+    card,
+    foreground,
+    mutedForeground,
+    primary,
+    primaryForeground,
+    radius,
 } from "@/constants/colors";
 import { useState } from "react";
 import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 
 export default function Contact() {

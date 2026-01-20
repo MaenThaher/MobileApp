@@ -1,11 +1,11 @@
 import {
-  background,
-  border,
-  card,
-  foreground,
-  mutedForeground,
-  primary,
-  radius,
+    background,
+    border,
+    card,
+    foreground,
+    mutedForeground,
+    primary,
+    radius,
 } from "@/constants/colors";
 import { Feather } from "@expo/vector-icons";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";

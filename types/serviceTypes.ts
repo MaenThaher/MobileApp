@@ -33,3 +33,40 @@ export interface InstructorSubmissionItem {
   feedback: string | null;
   graded_at: string | null;
 }
+// types/serviceTypes.ts
+export interface AdminAiManagementData {
+  overview: {
+    totalChats: number;
+    totalMessages: number;
+    avgMessagesPerChat: number;
+    uniqueUsersWithChats: number;
+    messagesToday: number;
+    messagesThisWeek: number;
+    messagesThisMonth: number;
+  };
+  slides: {
+    totalDecks: number;
+    pdfDecks: number;
+    pptxDecks: number;
+    totalSlides: number;
+    latestIngestAt: string | null;
+  };
+  documents: {
+    totalDocuments: number;
+    totalPages: number;
+    totalChunks: number;
+    latestIngestAt: string | null;
+  };
+  quality: {
+    unknownCount: number;
+    aiWithoutSources: number;
+    avgAiLength: number;
+    maxAiLength: number;
+    sourceCoverage: number;
+  };
+  unknownMessages: {
+    id: string;
+    message: string;
+    createdAt: string;
+  }[];
+}

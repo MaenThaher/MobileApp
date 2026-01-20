@@ -111,7 +111,7 @@ export default function AuthScreen() {
       await googleLogin(idToken);
     } catch (err: any) {
       setError(
-        err.message || "Failed to authenticate with Google. Please try again."
+        err.message || "Failed to authenticate with Google. Please try again.",
       );
     } finally {
       setIsGoogleLoading(false);
@@ -148,309 +148,315 @@ export default function AuthScreen() {
           </Text>
         </View>
 
-      <View style={styles.panel}>
-        {/* Tab Selector */}
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === "login" && styles.tabActive]}
-            onPress={() => {
-              setActiveTab("login");
-              resetForm();
-            }}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === "login" && styles.tabTextActive,
-              ]}
-            >
-              Log in
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === "signup" && styles.tabActive]}
-            onPress={() => {
-              setActiveTab("signup");
-              resetForm();
-            }}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === "signup" && styles.tabTextActive,
-              ]}
-            >
-              Create account
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Error Message */}
-        {error ? (
-          <View style={styles.errorContainer}>
-            <Feather name="info" size={16} color={destructive} />
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
-        ) : null}
-
-        {/* Login Form */}
-        {activeTab === "login" && (
-          <View style={styles.form}>
-            <View style={styles.groupStack}>
-              <View style={styles.fieldStack}>
-                <Text style={styles.label}>Email</Text>
-                <View style={styles.inputWrapper}>
-                  <Feather
-                    name="mail"
-                    size={18}
-                    color={mutedForeground}
-                    style={styles.inputIcon}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="your.email@najah.edu"
-                    placeholderTextColor={muted}
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.fieldStack}>
-                <Text style={styles.label}>Password</Text>
-                <View style={styles.inputWrapper}>
-                  <Feather
-                    name="lock"
-                    size={18}
-                    color={mutedForeground}
-                    style={styles.inputIcon}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Enter your password"
-                    placeholderTextColor={muted}
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                    autoCapitalize="none"
-                  />
-                </View>
-              </View>
-            </View>
-
+        <View style={styles.panel}>
+          {/* Tab Selector */}
+          <View style={styles.tabContainer}>
             <TouchableOpacity
-              style={[styles.actionButton, isLoading && styles.buttonDisabled]}
-              onPress={handleLogin}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <ActivityIndicator color={primaryForeground} />
-              ) : (
-                <>
-                  <Text style={styles.actionButtonText}>Log in</Text>
-                  <Feather
-                    name="arrow-right"
-                    size={18}
-                    color={primaryForeground}
-                  />
-                </>
-              )}
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.linkButton}
+              style={[styles.tab, activeTab === "login" && styles.tabActive]}
               onPress={() => {
-                // TODO: Implement forgot password
+                setActiveTab("login");
+                resetForm();
               }}
             >
-              <Text style={styles.linkButtonText}>Forgot password?</Text>
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === "login" && styles.tabTextActive,
+                ]}
+              >
+                Log in
+              </Text>
             </TouchableOpacity>
-
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>Or continue with</Text>
-              <View style={styles.dividerLine} />
-            </View>
-
             <TouchableOpacity
-              style={[
-                styles.secondaryButton,
-                (isLoading || isGoogleLoading || !request) &&
-                  styles.buttonDisabled,
-              ]}
-              onPress={handleGoogleSignIn}
-              disabled={isLoading || isGoogleLoading || !request}
+              style={[styles.tab, activeTab === "signup" && styles.tabActive]}
+              onPress={() => {
+                setActiveTab("signup");
+                resetForm();
+              }}
             >
-              {isGoogleLoading ? (
-                <ActivityIndicator color={foreground} />
-              ) : (
-                <>
-                  <Image
-                    source={{
-                      uri: "https://www.google.com/favicon.ico",
-                    }}
-                    style={styles.googleIcon}
-                  />
-                  <Text style={styles.secondaryButtonText}>Google</Text>
-                </>
-              )}
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === "signup" && styles.tabTextActive,
+                ]}
+              >
+                Create account
+              </Text>
             </TouchableOpacity>
           </View>
-        )}
 
-        {/* Signup Form */}
-        {activeTab === "signup" && (
-          <View style={styles.form}>
-            <View style={styles.groupStack}>
-              <View style={styles.fieldStack}>
-                <Text style={styles.label}>Full name</Text>
-                <View style={styles.inputWrapper}>
-                  <Feather
-                    name="user"
-                    size={18}
-                    color={mutedForeground}
-                    style={styles.inputIcon}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Ahmed Gharib"
-                    placeholderTextColor={muted}
-                    value={name}
-                    onChangeText={setName}
-                    autoCapitalize="words"
-                  />
-                </View>
-              </View>
-
-              <View style={styles.fieldStack}>
-                <Text style={styles.label}>University email</Text>
-                <View style={styles.inputWrapper}>
-                  <Feather
-                    name="mail"
-                    size={18}
-                    color={mutedForeground}
-                    style={styles.inputIcon}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="your.email@najah.edu"
-                    placeholderTextColor={muted}
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
-                </View>
-                <Text style={styles.helperText}>
-                  Use your An-Najah email if possible
-                </Text>
-              </View>
-
-              <View style={styles.fieldStack}>
-                <Text style={styles.label}>Password</Text>
-                <View style={styles.inputWrapper}>
-                  <Feather
-                    name="lock"
-                    size={18}
-                    color={mutedForeground}
-                    style={styles.inputIcon}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Enter your password"
-                    placeholderTextColor={muted}
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                    autoCapitalize="none"
-                  />
-                </View>
-              </View>
-
-              <View style={styles.fieldStack}>
-                <Text style={styles.label}>Confirm password</Text>
-                <View style={styles.inputWrapper}>
-                  <Feather
-                    name="lock"
-                    size={18}
-                    color={mutedForeground}
-                    style={styles.inputIcon}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Confirm your password"
-                    placeholderTextColor={muted}
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                    secureTextEntry
-                    autoCapitalize="none"
-                  />
-                </View>
-              </View>
+          {/* Error Message */}
+          {error ? (
+            <View style={styles.errorContainer}>
+              <Feather name="info" size={16} color={destructive} />
+              <Text style={styles.errorText}>{error}</Text>
             </View>
+          ) : null}
 
-            <TouchableOpacity
-              style={[styles.actionButton, isLoading && styles.buttonDisabled]}
-              onPress={handleSignup}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <ActivityIndicator color={primaryForeground} />
-              ) : (
-                <>
-                  <Text style={styles.actionButtonText}>Create account</Text>
-                  <Feather
-                    name="arrow-right"
-                    size={18}
-                    color={primaryForeground}
-                  />
-                </>
-              )}
-            </TouchableOpacity>
+          {/* Login Form */}
+          {activeTab === "login" && (
+            <View style={styles.form}>
+              <View style={styles.groupStack}>
+                <View style={styles.fieldStack}>
+                  <Text style={styles.label}>Email</Text>
+                  <View style={styles.inputWrapper}>
+                    <Feather
+                      name="mail"
+                      size={18}
+                      color={mutedForeground}
+                      style={styles.inputIcon}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="your.email@najah.edu"
+                      placeholderTextColor={muted}
+                      value={email}
+                      onChangeText={setEmail}
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                  </View>
+                </View>
 
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>Or sign up with</Text>
-              <View style={styles.dividerLine} />
+                <View style={styles.fieldStack}>
+                  <Text style={styles.label}>Password</Text>
+                  <View style={styles.inputWrapper}>
+                    <Feather
+                      name="lock"
+                      size={18}
+                      color={mutedForeground}
+                      style={styles.inputIcon}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Enter your password"
+                      placeholderTextColor={muted}
+                      value={password}
+                      onChangeText={setPassword}
+                      secureTextEntry
+                      autoCapitalize="none"
+                    />
+                  </View>
+                </View>
+              </View>
+
+              <TouchableOpacity
+                style={[
+                  styles.actionButton,
+                  isLoading && styles.buttonDisabled,
+                ]}
+                onPress={handleLogin}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <ActivityIndicator color={primaryForeground} />
+                ) : (
+                  <>
+                    <Text style={styles.actionButtonText}>Log in</Text>
+                    <Feather
+                      name="arrow-right"
+                      size={18}
+                      color={primaryForeground}
+                    />
+                  </>
+                )}
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.linkButton}
+                onPress={() => {
+                  // TODO: Implement forgot password
+                }}
+              >
+                <Text style={styles.linkButtonText}>Forgot password?</Text>
+              </TouchableOpacity>
+
+              <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>Or continue with</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <TouchableOpacity
+                style={[
+                  styles.secondaryButton,
+                  (isLoading || isGoogleLoading || !request) &&
+                    styles.buttonDisabled,
+                ]}
+                onPress={handleGoogleSignIn}
+                disabled={isLoading || isGoogleLoading || !request}
+              >
+                {isGoogleLoading ? (
+                  <ActivityIndicator color={foreground} />
+                ) : (
+                  <>
+                    <Image
+                      source={{
+                        uri: "https://www.google.com/favicon.ico",
+                      }}
+                      style={styles.googleIcon}
+                    />
+                    <Text style={styles.secondaryButtonText}>Google</Text>
+                  </>
+                )}
+              </TouchableOpacity>
             </View>
+          )}
 
-            <TouchableOpacity
-              style={[
-                styles.secondaryButton,
-                (isLoading || isGoogleLoading || !request) &&
-                  styles.buttonDisabled,
-              ]}
-              onPress={handleGoogleSignIn}
-              disabled={isLoading || isGoogleLoading || !request}
-            >
-              {isGoogleLoading ? (
-                <ActivityIndicator color={foreground} />
-              ) : (
-                <>
-                  <Image
-                    source={{
-                      uri: "https://www.google.com/favicon.ico",
-                    }}
-                    style={styles.googleIcon}
-                  />
-                  <Text style={styles.secondaryButtonText}>Google</Text>
-                </>
-              )}
-            </TouchableOpacity>
+          {/* Signup Form */}
+          {activeTab === "signup" && (
+            <View style={styles.form}>
+              <View style={styles.groupStack}>
+                <View style={styles.fieldStack}>
+                  <Text style={styles.label}>Full name</Text>
+                  <View style={styles.inputWrapper}>
+                    <Feather
+                      name="user"
+                      size={18}
+                      color={mutedForeground}
+                      style={styles.inputIcon}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Ahmed Gharib"
+                      placeholderTextColor={muted}
+                      value={name}
+                      onChangeText={setName}
+                      autoCapitalize="words"
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.fieldStack}>
+                  <Text style={styles.label}>University email</Text>
+                  <View style={styles.inputWrapper}>
+                    <Feather
+                      name="mail"
+                      size={18}
+                      color={mutedForeground}
+                      style={styles.inputIcon}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="your.email@najah.edu"
+                      placeholderTextColor={muted}
+                      value={email}
+                      onChangeText={setEmail}
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                  </View>
+                  <Text style={styles.helperText}>
+                    Use your An-Najah email if possible
+                  </Text>
+                </View>
+
+                <View style={styles.fieldStack}>
+                  <Text style={styles.label}>Password</Text>
+                  <View style={styles.inputWrapper}>
+                    <Feather
+                      name="lock"
+                      size={18}
+                      color={mutedForeground}
+                      style={styles.inputIcon}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Enter your password"
+                      placeholderTextColor={muted}
+                      value={password}
+                      onChangeText={setPassword}
+                      secureTextEntry
+                      autoCapitalize="none"
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.fieldStack}>
+                  <Text style={styles.label}>Confirm password</Text>
+                  <View style={styles.inputWrapper}>
+                    <Feather
+                      name="lock"
+                      size={18}
+                      color={mutedForeground}
+                      style={styles.inputIcon}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Confirm your password"
+                      placeholderTextColor={muted}
+                      value={confirmPassword}
+                      onChangeText={setConfirmPassword}
+                      secureTextEntry
+                      autoCapitalize="none"
+                    />
+                  </View>
+                </View>
+              </View>
+
+              <TouchableOpacity
+                style={[
+                  styles.actionButton,
+                  isLoading && styles.buttonDisabled,
+                ]}
+                onPress={handleSignup}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <ActivityIndicator color={primaryForeground} />
+                ) : (
+                  <>
+                    <Text style={styles.actionButtonText}>Create account</Text>
+                    <Feather
+                      name="arrow-right"
+                      size={18}
+                      color={primaryForeground}
+                    />
+                  </>
+                )}
+              </TouchableOpacity>
+
+              <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>Or sign up with</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <TouchableOpacity
+                style={[
+                  styles.secondaryButton,
+                  (isLoading || isGoogleLoading || !request) &&
+                    styles.buttonDisabled,
+                ]}
+                onPress={handleGoogleSignIn}
+                disabled={isLoading || isGoogleLoading || !request}
+              >
+                {isGoogleLoading ? (
+                  <ActivityIndicator color={foreground} />
+                ) : (
+                  <>
+                    <Image
+                      source={{
+                        uri: "https://www.google.com/favicon.ico",
+                      }}
+                      style={styles.googleIcon}
+                    />
+                    <Text style={styles.secondaryButtonText}>Google</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>
+              CircuitAI is currently available to An-Najah engineering students
+              and instructors as a graduation project.
+            </Text>
           </View>
-        )}
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            CircuitAI is currently available to An-Najah engineering students
-            and instructors as a graduation project.
-          </Text>
         </View>
-      </View>
       </ScrollView>
     </View>
   );

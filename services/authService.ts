@@ -6,10 +6,10 @@ import axios from "axios";
 
 export async function login(email: string, password: string): Promise<string> {
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/auth/token`, {
-      email,
-      password,
-    });
+     const response = await axios.post(`${API_BASE_URL}/api/auth/token`, {
+       email,
+       password,
+     });
 
     const loginResponse = response.data;
 
@@ -19,7 +19,7 @@ export async function login(email: string, password: string): Promise<string> {
   } catch (error: any) {
     if (error.response?.data) {
       const apiError: AxiosAPIError = error.response.data;
-      throw new Error(apiError.error || "Failed to login");
+      throw new Error(apiError.error || "Failed to login there is an proplem with somthing");
     }
     if (error.message) {
       throw error;

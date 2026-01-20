@@ -1,6 +1,7 @@
 import { background } from "@/constants/colors";
 import { useAuth } from "@/context/AuthContext";
 import { Redirect } from "expo-router";
+import React from "react";
 import { ActivityIndicator, View } from "react-native";
 
 export default function Index() {
@@ -23,18 +24,21 @@ export default function Index() {
 
   // Initial routing decision - Stack.Protected handles route security
   if (!isAuthenticated) {
+    // return <Redirect href="/(app)/(tabs-instructor)" />;
     return <Redirect href="/login" />;
   }
 
   // Redirect authenticated users to their role-based screen
+
   if (user?.role === "admin") {
-    return <Redirect href="/(app)/(tabs-admin)" />;
+    return <Redirect href="/(app)/(tabs-instructor)" />;
+
+    //  return <Redirect href="/(app)/(tabs-admin)" />;
   } else if (user?.role === "instructor") {
     return <Redirect href="/(app)/(tabs-instructor)" />;
   } else if (user?.role === "student") {
-    return <Redirect href="/(app)/(tabs-student)" />;
+    // return <Redirect href="/About" />;
+  } else {
+    return <Redirect href="/" />;
   }
-
-  // Fallback
-  return <Redirect href="/login" />;
 }

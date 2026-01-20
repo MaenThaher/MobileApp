@@ -108,7 +108,7 @@ export function parseDate(value?: string | null) {
 // This one simply extracts the path portion after the bucket name in storage URLs,which is used for file uploads
 export function deriveSupabasePathFromUrl(
   url: string | null | undefined,
-  bucket: string
+  bucket: string,
 ): string | null {
   if (!url || !bucket) return null;
 
@@ -123,13 +123,13 @@ export function deriveSupabasePathFromUrl(
 // Applies fallback if result is not a plausible file name.
 export function deriveFileNameFromUrl(
   url: string | null | undefined,
-  fallback = "Attachment"
+  fallback = "Attachment",
 ): string {
   if (!url) return fallback;
 
   // Drop query/fragments, get last path segment
   const candidate = decodeURIComponent(
-    url.split(/[?#]/)[0].split("/").filter(Boolean).pop() || ""
+    url.split(/[?#]/)[0].split("/").filter(Boolean).pop() || "",
   );
 
   // Remove leading timestamp prefix if present (e.g. 1234132-filename.txt)
