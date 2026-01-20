@@ -667,6 +667,7 @@ export default function StudentDashboardScreen() {
                   <Feather name="arrow-right" size={14} color={theme.primary} />
                 </TouchableOpacity>
               </View>
+
               <View style={styles.feedbackList}>
                 {isLoading ? (
                   <SkeletonCard />
@@ -714,16 +715,6 @@ export default function StudentDashboardScreen() {
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>Recent Activity</Text>
-                <TouchableOpacity
-                  style={styles.sectionAction}
-                  onPress={() =>
-                    router.push(`/(app)/(tabs-student)/activity` as any)
-                  }
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.sectionActionText}>View all</Text>
-                  <Feather name="arrow-right" size={14} color={theme.primary} />
-                </TouchableOpacity>
               </View>
               <View style={styles.activityFeed}>
                 {isLoading ? (
