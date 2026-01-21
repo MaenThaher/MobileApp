@@ -92,12 +92,11 @@ export default function InstructorSubmissionsScreen() {
   const handlePressCard = (item: InstructorSubmissionItem) => {
     if (item.type === "assignment" && item.assignment_id) {
       // Navigate to assignment grading
-      router.push(`/instructor/submissions/${item.id}` as any);
-    } else if (item.type === "quiz" && item.quiz_module_id) {
-      // Navigate to quiz review
       router.push(
-        `/instructor/courses/${item.course_id}/quiz/${item.quiz_module_id}` as any
+        `/(app)/(tabs-instructor)/courses/${item.course_id}/assignments/${item.assignment_id}/submission/${item.id}` as any
       );
+    } else if (item.type === "quiz" && item.quiz_module_id) {
+      // TO-DO: Navigate to quiz attempt grading
     }
   };
 

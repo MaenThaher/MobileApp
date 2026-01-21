@@ -1,14 +1,18 @@
 import { theme } from "@/constants/colors";
 import { useAuth } from "@/context/AuthContext";
-import {
-  getInstructorDashboard,
-  getInstructorSubmissions,
-} from "@/services/instructorService";
+import { getStudentDashboard } from "@/services/studentService";
 import type {
-  InstructorDashboardData,
-  InstructorSubmissionItem,
+  StudentDashboardData,
+  StudentModuleItem,
+  StudentRecentFeedbackItem,
 } from "@/types/serviceTypes";
-import { formatDate, formatTimeAgo } from "@/utils/generalUtils";
+import {
+  formatDate,
+  formatRelativeTime,
+  formatTimeAgo,
+  truncateText,
+} from "@/utils/generalUtils";
+import { formatCourseName } from "@/utils/uiUtils";
 import { Feather } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -24,6 +28,118 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+type NextUpItem = {
+  id: string;
+  title: string;
+  type: string;
+  courseLabel: string;
+  actionHref: string;
+  statusLabel: string;
+  timeLabel: string;
+  isOverdue: boolean;
+  isDueSoon: boolean;
+};
+
+const calculateAverageProgress = (enrollments: StudentDashboardData["enrollments"]) =>
+  enrollments.length
+    ? Math.round(
+        enrollments.reduce((acc, item) => acc + (item.progress ?? 0), 0) /
+          enrollments.length
+      )
+    : 0;
+
+const getTypeIconName = (type: string): keyof typeof Feather.glyphMap => {
+  if (type === "Assignment") return "file-text";
+  if (type === "Quiz") return "check-circle";
+  return "book-open";
+};
+
+const buildNextUpItem = (
+  item: StudentModuleItem,
+  now: Date
+): NextUpItem | null => {
+  if (item.type === "Assignment") {
+    if (!item.assignment_id || !item.course_id) return null;
+    const submissionStatus = item.submission_status ?? "not_started";
+    let statusLabel = "Not started";
+    if (submissionStatus === "in_progress") statusLabel = "In progress";
+    if (submissionStatus === "submitted") statusLabel = "Submitted";
+    if (submissionStatus === "graded") statusLabel = "Graded";
+
+    let timeLabel = "No due date";
+    let isOverdue = false;
+    let isDueSoon = false;
+
+    if (item.due_date) {
+      const relative = formatRelativeTime(new Date(item.due_date), now);
+      timeLabel = relative.isOverdue
+        ? `OVERDUE ${relative.label}`
+        : `Due in ${relative.label}`;
+      isOverdue = relative.isOverdue;
+      isDueSoon = relative.isDueSoon;
+    }
+
+    return {
+      id: item.assignment_id,
+      title: item.title,
+      type: item.type,
+      courseLabel: formatCourseName(item.course_code, item.course_name),
+      actionHref: `/(app)/(tabs-student)/courses/${item.course_id}/assignments/${item.assignment_id}`,
+      statusLabel,
+      timeLabel,
+      isOverdue,
+      isDueSoon,
+    };
+  }
+
+  if (item.type === "Quiz") {
+    if (!item.module_id || !item.course_id) return null;
+    const statusLabel = item.quiz_attempt_id ? "In progress" : "Not started";
+
+    let timeLabel = "Ready to start";
+    let isOverdue = false;
+    let isDueSoon = false;
+
+    if (item.quiz_starts_at && new Date(item.quiz_starts_at) > now) {
+      const relative = formatRelativeTime(new Date(item.quiz_starts_at), now);
+      timeLabel = `Opens in ${relative.label}`;
+    } else if (item.quiz_ends_at) {
+      const relative = formatRelativeTime(new Date(item.quiz_ends_at), now);
+      timeLabel = relative.isOverdue
+        ? `Closed ${relative.label} ago`
+        : `Ends in ${relative.label}`;
+      isOverdue = relative.isOverdue;
+      isDueSoon = relative.isDueSoon;
+    }
+
+    return {
+      id: item.module_id,
+      title: item.title,
+      type: item.type,
+      courseLabel: formatCourseName(item.course_code, item.course_name),
+      actionHref: `/(app)/(tabs-student)/courses/${item.course_id}/modules/${item.module_id}/quiz`,
+      statusLabel,
+      timeLabel,
+      isOverdue,
+      isDueSoon,
+    };
+  }
+
+  if (!item.course_id) return null;
+
+  return {
+    id: item.module_id ?? item.course_id,
+    title: item.title,
+    type: item.type,
+    courseLabel: formatCourseName(item.course_code, item.course_name),
+    actionHref: `/(app)/(tabs-student)/courses/${item.course_id}`,
+    statusLabel: "Next to open",
+    timeLabel: "Ready to start",
+    isOverdue: false,
+    isDueSoon: false,
+  };
+};
 
 const StatCard = ({
   label,
@@ -57,96 +173,72 @@ const StatCard = ({
   );
 };
 
-const ReviewCard = ({ item }: { item: InstructorSubmissionItem }) => {
+const FeedbackCard = ({ item }: { item: StudentRecentFeedbackItem }) => {
   const router = useRouter();
-  const isAssignment = item.type === "assignment";
-  const title = isAssignment ? item.assignment_title : item.quiz_title;
-  const timestamp = item.submitted_at || item.completed_at || null;
-  const isDisabled = !isAssignment || !item.assignment_id || !item.course_id;
-
-  const handlePress = () => {
-    if (isDisabled || !item.assignment_id || !item.course_id) return;
-    router.push(
-      `/(app)/(tabs-instructor)/courses/${item.course_id}/assignments/${item.assignment_id}/submission/${item.id}` as any
-    );
-  };
+  const scoreLabel =
+    item.grade !== null && item.max_score
+      ? `Graded ${item.grade}/${item.max_score}`
+      : "Feedback added";
+  const feedbackPreview =
+    truncateText(item.feedback, 90) || "No feedback provided.";
+  const actionHref =
+    item.id && item.course_id
+      ? `/(app)/(tabs-student)/courses/${item.course_id}/assignments/${item.id}`
+      : "";
 
   return (
     <TouchableOpacity
-      style={[styles.reviewCard, isDisabled && styles.reviewCardDisabled]}
-      onPress={handlePress}
+      style={styles.feedbackCard}
+      onPress={() => actionHref && router.push(actionHref as any)}
       activeOpacity={0.7}
-      disabled={isDisabled}
     >
-      <View style={styles.reviewHeader}>
-        <View style={styles.reviewType}>
-          <Feather
-            name={isAssignment ? "file-text" : "check-circle"}
-            size={14}
-            color={theme.mutedForeground}
-          />
-          <Text style={styles.reviewTypeText}>
-            {isAssignment ? "Assignment" : "Quiz"}
-          </Text>
-        </View>
-        <Text style={styles.reviewTime}>{formatTimeAgo(timestamp)}</Text>
-      </View>
-      <Text style={styles.reviewTitle} numberOfLines={2}>
-        {title || "Untitled submission"}
-      </Text>
-      <View style={styles.reviewMeta}>
-        <Text style={styles.reviewMetaText} numberOfLines={1}>
-          {item.student_name || "Student"} • {item.course_code || "Course"}
+      <View style={styles.feedbackHeader}>
+        <Feather name="check-circle" size={16} color={theme.primary} />
+        <Text style={styles.feedbackTitle} numberOfLines={1}>
+          {item.title}
         </Text>
-        {!isDisabled && (
-          <Feather
-            name="chevron-right"
-            size={16}
-            color={theme.mutedForeground}
-          />
-        )}
       </View>
+      <Text style={styles.feedbackMeta}>
+        {formatCourseName(item.course_code, item.course_name)} • {scoreLabel}
+      </Text>
+      <Text style={styles.feedbackPreview} numberOfLines={2}>
+        {feedbackPreview}
+      </Text>
+      <Text style={styles.feedbackDate}>{formatDate(item.date)}</Text>
     </TouchableOpacity>
   );
 };
 
-export default function InstructorProfileScreen() {
+export default function StudentProfileScreen() {
   const router = useRouter();
   const { user, logout } = useAuth();
 
   const [dashboardData, setDashboardData] =
-    useState<InstructorDashboardData | null>(null);
-  const [submissions, setSubmissions] = useState<InstructorSubmissionItem[]>(
-    []
-  );
+    useState<StudentDashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const instructorId = user?.id ?? null;
+  const studentId = user?.id ?? null;
 
   const fetchProfileData = useCallback(
     async (isRefresh = false) => {
-      if (!instructorId) return;
+      if (!studentId) return;
 
       try {
         if (!isRefresh) setIsLoading(true);
         setErrorMessage(null);
-        const [dashboard, pending] = await Promise.all([
-          getInstructorDashboard(instructorId),
-          getInstructorSubmissions(instructorId),
-        ]);
-        setDashboardData(dashboard);
-        setSubmissions(pending);
+        const data = await getStudentDashboard(studentId);
+        setDashboardData(data);
       } catch (error) {
-        console.error("Error loading instructor profile:", error);
+        console.error("Error loading student profile:", error);
         setErrorMessage("Failed to load profile details.");
       } finally {
         setIsLoading(false);
         if (isRefresh) setIsRefreshing(false);
       }
     },
-    [instructorId]
+    [studentId]
   );
 
   useEffect(() => {
@@ -158,18 +250,28 @@ export default function InstructorProfileScreen() {
     fetchProfileData(true);
   };
 
-  const activeCourses = dashboardData?.activeCourses ?? [];
-  const assignments = dashboardData?.assignments ?? [];
+  const enrollments = dashboardData?.enrollments ?? [];
+  const recentFeedback = dashboardData?.recentFeedback ?? [];
   const activities = dashboardData?.activities ?? [];
+  const nextModules = dashboardData?.nextModules ?? [];
 
-  const totalStudents = useMemo(
-    () =>
-      activeCourses.reduce(
-        (sum, course) => sum + (course.student_count ?? 0),
-        0
-      ),
-    [activeCourses]
+  const resumeCount =
+    (dashboardData?.resumeAssignments?.length ?? 0) +
+    (dashboardData?.resumeQuizzes?.length ?? 0) +
+    (dashboardData?.resumeModules?.length ?? 0);
+
+  const averageProgress = useMemo(
+    () => calculateAverageProgress(enrollments),
+    [enrollments]
   );
+
+  const nextUpItems = useMemo(() => {
+    const now = new Date();
+    return nextModules
+      .map((item) => buildNextUpItem(item, now))
+      .filter((item): item is NextUpItem => Boolean(item))
+      .slice(0, 3);
+  }, [nextModules]);
 
   const userInitial =
     user?.full_name?.charAt(0) ||
@@ -222,7 +324,7 @@ export default function InstructorProfileScreen() {
                   {user.full_name}
                 </Text>
                 <View style={styles.rolePill}>
-                  <Text style={styles.roleText}>Instructor</Text>
+                  <Text style={styles.roleText}>Student</Text>
                 </View>
               </View>
               <Text style={styles.emailText} numberOfLines={1}>
@@ -234,8 +336,7 @@ export default function InstructorProfileScreen() {
             </View>
           </View>
           <Text style={styles.bioText}>
-            {user.bio ||
-              "Highlight your teaching focus, office hours, and research areas."}
+            {user.bio || "Add a short bio to share your learning goals."}
           </Text>
           <View style={styles.metaRow}>
             <View style={styles.metaItem}>
@@ -244,7 +345,7 @@ export default function InstructorProfileScreen() {
             </View>
             <View style={styles.metaItem}>
               <Text style={styles.metaLabel}>Active courses</Text>
-              <Text style={styles.metaValue}>{activeCourses.length}</Text>
+              <Text style={styles.metaValue}>{enrollments.length}</Text>
             </View>
           </View>
         </View>
@@ -258,62 +359,107 @@ export default function InstructorProfileScreen() {
         <View style={styles.statsGrid}>
           <StatCard
             label="Courses"
-            value={activeCourses.length}
+            value={enrollments.length}
             icon="book-open"
             tone="primary"
           />
           <StatCard
-            label="Students"
-            value={totalStudents}
-            icon="users"
+            label="Avg progress"
+            value={`${averageProgress}%`}
+            icon="trending-up"
             tone="success"
           />
           <StatCard
-            label="Assignments"
-            value={assignments.length}
-            icon="clipboard"
+            label="In progress"
+            value={resumeCount}
+            icon="play-circle"
             tone="accent"
           />
           <StatCard
-            label="Pending review"
-            value={submissions.length}
-            icon="alert-circle"
+            label="Upcoming"
+            value={nextModules.length}
+            icon="calendar"
             tone="warning"
           />
         </View>
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Needs review</Text>
+            <Text style={styles.sectionTitle}>Next up</Text>
             <TouchableOpacity
               style={styles.sectionAction}
               onPress={() =>
-                router.push(`/(app)/(tabs-instructor)/submissions` as any)
+                router.push(`/(app)/(tabs-student)/calendar` as any)
               }
               activeOpacity={0.7}
             >
-              <Text style={styles.sectionActionText}>Submissions</Text>
+              <Text style={styles.sectionActionText}>Calendar</Text>
               <Feather name="arrow-right" size={14} color={theme.primary} />
             </TouchableOpacity>
           </View>
-          {submissions.length === 0 ? (
+          {nextUpItems.length === 0 ? (
             <View style={styles.emptyCard}>
-              <Text style={styles.emptyText}>No pending submissions.</Text>
+              <Text style={styles.emptyText}>No upcoming items yet.</Text>
             </View>
           ) : (
-            submissions.slice(0, 3).map((item) => (
-              <ReviewCard key={item.id} item={item} />
-            ))
+            nextUpItems.map((item) => {
+              const badgeStyle = item.isOverdue
+                ? styles.badgeOverdue
+                : item.isDueSoon
+                ? styles.badgeSoon
+                : styles.badgeNeutral;
+              const badgeText = item.isOverdue
+                ? "Overdue"
+                : item.isDueSoon
+                ? "Due soon"
+                : item.statusLabel;
+
+              return (
+                <TouchableOpacity
+                  key={item.id}
+                  style={styles.nextUpCard}
+                  onPress={() => router.push(item.actionHref as any)}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.nextUpIcon}>
+                    <Feather
+                      name={getTypeIconName(item.type)}
+                      size={18}
+                      color={theme.primary}
+                    />
+                  </View>
+                  <View style={styles.nextUpContent}>
+                    <Text style={styles.nextUpTitle} numberOfLines={1}>
+                      {item.title}
+                    </Text>
+                    <Text style={styles.nextUpMeta} numberOfLines={1}>
+                      {item.courseLabel}
+                    </Text>
+                    <View style={styles.nextUpFooter}>
+                      <View style={[styles.badge, badgeStyle]}>
+                        <Text style={styles.badgeText}>{badgeText}</Text>
+                      </View>
+                      <Text style={styles.nextUpTime}>{item.timeLabel}</Text>
+                    </View>
+                  </View>
+                  <Feather
+                    name="chevron-right"
+                    size={18}
+                    color={theme.mutedForeground}
+                  />
+                </TouchableOpacity>
+              );
+            })
           )}
         </View>
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Active courses</Text>
+            <Text style={styles.sectionTitle}>Recent feedback</Text>
             <TouchableOpacity
               style={styles.sectionAction}
               onPress={() =>
-                router.push(`/(app)/(tabs-instructor)/courses` as any)
+                router.push(`/(app)/(tabs-student)/courses` as any)
               }
               activeOpacity={0.7}
             >
@@ -321,56 +467,13 @@ export default function InstructorProfileScreen() {
               <Feather name="arrow-right" size={14} color={theme.primary} />
             </TouchableOpacity>
           </View>
-          {activeCourses.length === 0 ? (
+          {recentFeedback.length === 0 ? (
             <View style={styles.emptyCard}>
-              <Text style={styles.emptyText}>No active courses yet.</Text>
+              <Text style={styles.emptyText}>No feedback yet.</Text>
             </View>
           ) : (
-            activeCourses.slice(0, 2).map((course) => (
-              <TouchableOpacity
-                key={course.id}
-                style={styles.courseCard}
-                onPress={() =>
-                  router.push(
-                    `/(app)/(tabs-instructor)/courses/${course.id}` as any
-                  )
-                }
-                activeOpacity={0.7}
-              >
-                <View style={styles.courseHeader}>
-                  <View style={styles.courseIcon}>
-                    <Feather name="book-open" size={18} color={theme.primary} />
-                  </View>
-                  <View style={styles.courseBadge}>
-                    <Text style={styles.courseBadgeText}>{course.code}</Text>
-                  </View>
-                </View>
-                <Text style={styles.courseName} numberOfLines={2}>
-                  {course.name}
-                </Text>
-                <View style={styles.courseMetaRow}>
-                  <View style={styles.courseMetaItem}>
-                    <Feather
-                      name="users"
-                      size={14}
-                      color={theme.mutedForeground}
-                    />
-                    <Text style={styles.courseMetaText}>
-                      {course.student_count ?? 0} Students
-                    </Text>
-                  </View>
-                  <View style={styles.courseMetaItem}>
-                    <Feather
-                      name="file-text"
-                      size={14}
-                      color={theme.mutedForeground}
-                    />
-                    <Text style={styles.courseMetaText}>
-                      {course.total_assignments ?? 0} Assign.
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
+            recentFeedback.slice(0, 2).map((item, index) => (
+              <FeedbackCard key={`${item.kind}-${index}`} item={item} />
             ))
           )}
         </View>
@@ -418,7 +521,7 @@ export default function InstructorProfileScreen() {
             <TouchableOpacity
               style={styles.actionCard}
               onPress={() =>
-                router.push(`/(app)/(tabs-instructor)/courses` as any)
+                router.push(`/(app)/(tabs-student)/courses` as any)
               }
               activeOpacity={0.7}
             >
@@ -430,14 +533,14 @@ export default function InstructorProfileScreen() {
             <TouchableOpacity
               style={styles.actionCard}
               onPress={() =>
-                router.push(`/(app)/(tabs-instructor)/submissions` as any)
+                router.push(`/(app)/(tabs-student)/calendar` as any)
               }
               activeOpacity={0.7}
             >
               <View style={styles.actionIcon}>
-                <Feather name="inbox" size={18} color={theme.primary} />
+                <Feather name="calendar" size={18} color={theme.primary} />
               </View>
-              <Text style={styles.actionText}>Submissions</Text>
+              <Text style={styles.actionText}>Calendar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -636,100 +739,95 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.mutedForeground,
   },
-  reviewCard: {
+  nextUpCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
     backgroundColor: theme.card,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: theme.border,
-    padding: 14,
-    gap: 8,
+    padding: 12,
   },
-  reviewCardDisabled: {
-    opacity: 0.6,
-  },
-  reviewHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  nextUpIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: "rgba(59, 130, 246, 0.12)",
     alignItems: "center",
+    justifyContent: "center",
   },
-  reviewType: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
+  nextUpContent: {
+    flex: 1,
+    gap: 4,
   },
-  reviewTypeText: {
-    fontSize: 11,
-    color: theme.mutedForeground,
-  },
-  reviewTime: {
-    fontSize: 11,
-    color: theme.mutedForeground,
-  },
-  reviewTitle: {
+  nextUpTitle: {
     fontSize: 14,
     fontWeight: "600",
     color: theme.foreground,
   },
-  reviewMeta: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 8,
-  },
-  reviewMetaText: {
+  nextUpMeta: {
     fontSize: 12,
     color: theme.mutedForeground,
-    flex: 1,
   },
-  courseCard: {
+  nextUpFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  nextUpTime: {
+    fontSize: 11,
+    color: theme.mutedForeground,
+  },
+  badge: {
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: theme.foreground,
+  },
+  badgeOverdue: {
+    backgroundColor: "rgba(239, 68, 68, 0.18)",
+  },
+  badgeSoon: {
+    backgroundColor: "rgba(245, 158, 11, 0.2)",
+  },
+  badgeNeutral: {
+    backgroundColor: theme.secondary,
+  },
+  feedbackCard: {
     backgroundColor: theme.card,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: theme.border,
     padding: 14,
-    gap: 10,
+    gap: 8,
   },
-  courseHeader: {
+  feedbackHeader: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    gap: 8,
   },
-  courseIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(59, 130, 246, 0.12)",
-  },
-  courseBadge: {
-    backgroundColor: theme.secondary,
-    borderRadius: 10,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-  },
-  courseBadgeText: {
-    fontSize: 11,
-    color: theme.mutedForeground,
-    fontWeight: "600",
-  },
-  courseName: {
-    fontSize: 15,
+  feedbackTitle: {
+    fontSize: 14,
     fontWeight: "600",
     color: theme.foreground,
+    flex: 1,
   },
-  courseMetaRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 12,
-  },
-  courseMetaItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-  },
-  courseMetaText: {
+  feedbackMeta: {
     fontSize: 12,
+    color: theme.mutedForeground,
+  },
+  feedbackPreview: {
+    fontSize: 12,
+    color: theme.foreground,
+    lineHeight: 18,
+  },
+  feedbackDate: {
+    fontSize: 11,
     color: theme.mutedForeground,
   },
   activityItem: {

@@ -12,6 +12,10 @@ Did read a few docs before starting, and asked the AI for some tips too & to giv
 [https://reactnative.dev/docs/intro-react5]
 [https://reactnative.dev/docs/tutorial]
 
+[https://reactnative.dev/docs/modal]
+[https://reactnative.dev/docs/pressable]
+[https://reactnative.dev/docs/next/safeareaview]
+
 ### EXPO
 
 [https://docs.expo.dev/versions/latest/sdk/constants/]
