@@ -60,14 +60,14 @@ return(<ScrollView style = {styles.page}>
 <Card
           title="Students"
           description="Manage student accounts and activity"
-          href="/admin/students"
+          href={"/admin/students" as any}
           icon={<Ionicons name="school-outline" size={34} color="#fff" />}
 />
 
 <Card
           title="Teachers"
           description="Manage instructors and teaching assignments"
-          href="/admin/teachers"
+          href={"/admin/teachers" as any}
           icon={<Ionicons name="person-circle-outline" size={34} color="#fff" />}
         />
 
@@ -75,7 +75,7 @@ return(<ScrollView style = {styles.page}>
    <Card
           title="Courses"
           description="Oversee courses and curriculum"
-          href="/admin/courses"
+          href={"/admin/courses" as any}
           icon={<Ionicons name="book-outline" size={34} color="#fff" />}
         />
 
@@ -83,7 +83,7 @@ return(<ScrollView style = {styles.page}>
        <Card
           title="Analytics"
           description="View usage and engagement metrics"
-          href="/admin/analytics"
+          href={"/admin/analytics" as any}
           icon={<Ionicons name="bar-chart-outline" size={34} color="#fff" />}
         />      
 

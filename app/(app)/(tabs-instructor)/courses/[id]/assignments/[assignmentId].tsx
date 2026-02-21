@@ -146,7 +146,13 @@ export default function AssignmentDetailScreen() {
     }
   };
 
-  const getStatusStyles = (status: string) => {
+  const getStatusStyles = (status: string | undefined | null) => {
+    if (!status) {
+      return {
+        color: theme.mutedForeground,
+        background: theme.secondary,
+      };
+    }
     switch (status.toLowerCase()) {
       case "published":
         return {
